@@ -50,7 +50,7 @@ SQLite or MySQL
 🔧 Installation
 1. Clone the Repository
 bash
-git clone https://github.com/yourusername/zap-link.git
+git clone https://github.com/patrickiyiakimo/ZapLink.git
 cd zap-link
 
 2. Install PHP Dependencies
