@@ -36,31 +36,60 @@ class LinkController extends Controller
         return view('links.create');
     }
     
-    public function store(StoreLinkRequest $request)
-    {
-        try {
-            $link = $this->linkService->createLink(
-                $request->validated(),
-                $request->user()?->id
-            );
-            
-            return redirect()
-                ->route('links.show', $link->short_code)
-                ->with('success', '✨ Link created successfully! Your short URL is: ' . url('/' . $link->short_code));
-                
-        } catch (\InvalidArgumentException $e) {
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', $e->getMessage());
-        } catch (\Exception $e) {
-            Log::error('Link creation failed: ' . $e->getMessage());
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', 'Something went wrong. Please try again.');
+ 
+public function store(StoreLinkRequest $request)
+{
+    try {
+        $link = $this->linkService->createLink(
+            $request->validated(),
+            $request->user()?->id
+        );
+        
+        // If AJAX request, return JSON
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'link' => [
+                    'short_url' => url('/' . $link->short_code),
+                    'short_code' => $link->short_code,
+                    'original_url' => $link->original_url,
+                ]
+            ]);
         }
+        
+        // Traditional form submission
+        return redirect()
+            ->route('links.show', $link->short_code)
+            ->with('success', '✨ Link created successfully!');
+            
+    } catch (\InvalidArgumentException $e) {
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 422);
+        }
+        
+        return redirect()
+            ->back()
+            ->withInput()
+            ->with('error', $e->getMessage());
+    } catch (\Exception $e) {
+        \Illuminate\Support\Facades\Log::error('Link creation failed: ' . $e->getMessage());
+        
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong. Please try again.'
+            ], 500);
+        }
+        
+        return redirect()
+            ->back()
+            ->withInput()
+            ->with('error', 'Something went wrong. Please try again.');
     }
+}
     
     public function show(string $shortCode)
     {

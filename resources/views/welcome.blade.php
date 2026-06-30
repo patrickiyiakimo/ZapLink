@@ -24,46 +24,39 @@
                 Track clicks, analyze traffic, and boost your engagement.
             </p>
             
-            <!-- Flash Messages - Auto Dismissing -->
-            @if(session('success'))
-                <div id="success-banner" class="max-w-2xl mx-auto mb-6 bg-green-500/90 backdrop-blur-sm text-white p-4 rounded-lg shadow-lg border border-green-400 transform transition-all duration-300">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            <span>{{ session('success') }}</span>
-                        </div>
-                        <button onclick="dismissBanner('success-banner')" class="text-white hover:text-gray-200 transition">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            @endif
-
-            @if(session('error'))
-                <div id="error-banner" class="max-w-2xl mx-auto mb-6 bg-red-500/90 backdrop-blur-sm text-white p-4 rounded-lg shadow-lg border border-red-400 transform transition-all duration-300">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            <span>{{ session('error') }}</span>
-                        </div>
-                        <button onclick="dismissBanner('error-banner')" class="text-white hover:text-gray-200 transition">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            @endif
-
             <!-- URL Shortener Form -->
             <div class="max-w-2xl mx-auto bg-gray-800 rounded-lg shadow-xl p-6 border border-gray-700">
-                <form action="{{ route('links.store') }}" method="POST" class="space-y-4" id="shortenForm">
+                <!-- Results Container -->
+                <div id="resultContainer" class="hidden mb-6">
+                    <div class="bg-green-500/20 border border-green-400 text-green-300 p-4 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <p class="text-sm font-medium">Your short URL is ready!</p>
+                                <div class="flex items-center mt-2 space-x-2">
+                                    <input type="text" 
+                                           id="shortUrlResult" 
+                                           class="flex-1 bg-gray-700 text-white px-4 py-2 rounded border border-gray-600" 
+                                           readonly>
+                                    <button onclick="copyResult()" 
+                                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition">
+                                        Copy
+                                    </button>
+                                    <a href="#" id="resultLink" 
+                                       class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded transition">
+                                        View
+                                    </a>
+                                </div>
+                            </div>
+                            <button onclick="dismissResult()" class="ml-4 text-gray-400 hover:text-white">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="shortenForm" class="space-y-4">
                     @csrf
                     
                     <div class="flex flex-col md:flex-row gap-4">
@@ -72,12 +65,9 @@
                                    name="original_url" 
                                    id="original_url"
                                    placeholder="Paste your long URL here..."
-                                   class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 transition @error('original_url') border-red-500 @enderror"
-                                   value="{{ old('original_url') }}"
+                                   class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 transition"
                                    required>
-                            @error('original_url')
-                                <p class="text-red-400 text-sm mt-1 text-left">{{ $message }}</p>
-                            @enderror
+                            <div id="urlError" class="text-red-400 text-sm mt-1 text-left hidden"></div>
                         </div>
                         
                         <button type="submit" 
@@ -94,7 +84,6 @@
                                    name="custom_code" 
                                    id="custom_code"
                                    placeholder="my-custom-link"
-                                   value="{{ old('custom_code') }}"
                                    class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500">
                             <p class="text-gray-500 text-xs mt-1 text-left" id="customCodeHint">4-20 characters (letters and numbers only)</p>
                         </div>
@@ -103,12 +92,20 @@
                             <label class="text-gray-400 block text-left mb-1">Expires (Optional)</label>
                             <input type="datetime-local" 
                                    name="expires_at"
-                                   value="{{ old('expires_at') }}"
+                                   id="expires_at"
                                    min="{{ now()->addDay()->format('Y-m-d\TH:i') }}"
                                    class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500">
                         </div>
                     </div>
                 </form>
+
+                <!-- Loading Spinner -->
+                <div id="loadingSpinner" class="hidden mt-4">
+                    <div class="flex items-center justify-center space-x-2">
+                        <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+                        <span class="text-gray-300">Shortening your URL...</span>
+                    </div>
+                </div>
 
                 <!-- Validation Rules Info -->
                 <div class="mt-4 pt-4 border-t border-gray-700">
@@ -159,11 +156,11 @@
             <!-- Stats -->
             <div class="mt-16 flex justify-center space-x-8 text-white">
                 <div class="text-center">
-                    <div class="text-3xl font-bold text-blue-400">10K+</div>
+                    <div class="text-3xl font-bold text-blue-400" id="totalLinks">0</div>
                     <div class="text-gray-400">Links Created</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-3xl font-bold text-blue-400">50K+</div>
+                    <div class="text-3xl font-bold text-blue-400" id="totalClicks">0</div>
                     <div class="text-gray-400">Clicks Tracked</div>
                 </div>
                 <div class="text-center">
@@ -176,83 +173,129 @@
 </div>
 
 <script>
-// Auto-dismiss banners after 5 seconds
 document.addEventListener('DOMContentLoaded', function() {
-    // Success banner auto-dismiss
-    const successBanner = document.getElementById('success-banner');
-    if (successBanner) {
-        setTimeout(() => {
-            dismissBanner('success-banner');
-        }, 5000);
-    }
-
-    // Error banner auto-dismiss
-    const errorBanner = document.getElementById('error-banner');
-    if (errorBanner) {
-        setTimeout(() => {
-            dismissBanner('error-banner');
-        }, 8000); // Error messages stay a bit longer
-    }
-});
-
-// Function to dismiss banner with animation
-function dismissBanner(id) {
-    const banner = document.getElementById(id);
-    if (banner) {
-        banner.style.opacity = '0';
-        banner.style.transform = 'translateY(-20px)';
-        setTimeout(() => {
-            banner.style.display = 'none';
-        }, 300);
-    }
-}
-
-// Real-time URL validation
-document.getElementById('original_url').addEventListener('input', function() {
-    const url = this.value.trim();
-    const errorMessage = document.querySelector('.text-red-400');
+    const form = document.getElementById('shortenForm');
+    const submitBtn = document.getElementById('shortenBtn');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const resultContainer = document.getElementById('resultContainer');
+    const urlError = document.getElementById('urlError');
     
-    if (url && !isValidUrl(url)) {
-        this.classList.add('border-yellow-500');
-        this.classList.remove('border-red-500', 'border-green-500');
-    } else if (url && isValidUrl(url)) {
-        this.classList.remove('border-yellow-500', 'border-red-500');
-        this.classList.add('border-green-500');
-    } else {
-        this.classList.remove('border-yellow-500', 'border-red-500', 'border-green-500');
-    }
+    // Real-time URL validation
+    document.getElementById('original_url').addEventListener('input', function() {
+        const url = this.value.trim();
+        if (url && !isValidUrl(url)) {
+            this.classList.add('border-yellow-500');
+            this.classList.remove('border-red-500', 'border-green-500');
+        } else if (url && isValidUrl(url)) {
+            this.classList.remove('border-yellow-500', 'border-red-500');
+            this.classList.add('border-green-500');
+        } else {
+            this.classList.remove('border-yellow-500', 'border-red-500', 'border-green-500');
+        }
+    });
+
+    // Custom code validation
+    document.getElementById('custom_code').addEventListener('input', function() {
+        const code = this.value.trim();
+        const hint = document.getElementById('customCodeHint');
+        
+        if (code && !/^[a-zA-Z0-9]+$/.test(code)) {
+            hint.textContent = '❌ Only letters and numbers allowed';
+            hint.classList.add('text-red-400');
+            hint.classList.remove('text-gray-500');
+            this.classList.add('border-red-500');
+        } else if (code && (code.length < 4 || code.length > 20)) {
+            hint.textContent = '❌ Must be 4-20 characters';
+            hint.classList.add('text-red-400');
+            hint.classList.remove('text-gray-500');
+            this.classList.add('border-red-500');
+        } else if (code) {
+            hint.textContent = '✅ Valid custom code';
+            hint.classList.remove('text-red-400', 'text-gray-500');
+            hint.classList.add('text-green-400');
+            this.classList.remove('border-red-500');
+            this.classList.add('border-green-500');
+        } else {
+            hint.textContent = '4-20 characters (letters and numbers only)';
+            hint.classList.remove('text-red-400', 'text-green-400');
+            hint.classList.add('text-gray-500');
+            this.classList.remove('border-red-500', 'border-green-500');
+        }
+    });
+
+    // Form submission via AJAX
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const url = document.getElementById('original_url').value.trim();
+        
+        // Validate URL
+        if (!url) {
+            showError('Please enter a URL to shorten.');
+            return;
+        }
+        
+        if (!isValidUrl(url)) {
+            showError('Please enter a valid URL (http:// or https://).');
+            return;
+        }
+        
+        // Disable button and show loading
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Shortening...';
+        submitBtn.classList.add('opacity-50');
+        loadingSpinner.classList.remove('hidden');
+        resultContainer.classList.add('hidden');
+        urlError.classList.add('hidden');
+        
+        try {
+            // Get CSRF token
+            const token = document.querySelector('input[name="_token"]').value;
+            
+            // Get form data
+            const formData = new FormData(form);
+            
+            // Make AJAX request
+            const response = await fetch('{{ route("links.store") }}', {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': token
+                },
+                body: formData
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                // Show result
+                showResult(data.link.short_url, data.link.short_code);
+                
+                // Clear form
+                document.getElementById('original_url').value = '';
+                document.getElementById('custom_code').value = '';
+                document.getElementById('expires_at').value = '';
+                
+                // Update stats
+                updateStats();
+            } else {
+                showError(data.message || 'Something went wrong.');
+            }
+        } catch (error) {
+            showError('An error occurred. Please try again.');
+            console.error('Error:', error);
+        } finally {
+            // Re-enable button
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Shorten URL';
+            submitBtn.classList.remove('opacity-50');
+            loadingSpinner.classList.add('hidden');
+        }
+    });
 });
 
-// Custom code validation
-document.getElementById('custom_code').addEventListener('input', function() {
-    const code = this.value.trim();
-    const hint = document.getElementById('customCodeHint');
-    
-    if (code && !/^[a-zA-Z0-9]+$/.test(code)) {
-        hint.textContent = '❌ Only letters and numbers allowed';
-        hint.classList.add('text-red-400');
-        hint.classList.remove('text-gray-500');
-        this.classList.add('border-red-500');
-    } else if (code && (code.length < 4 || code.length > 20)) {
-        hint.textContent = '❌ Must be 4-20 characters';
-        hint.classList.add('text-red-400');
-        hint.classList.remove('text-gray-500');
-        this.classList.add('border-red-500');
-    } else if (code) {
-        hint.textContent = '✅ Valid custom code';
-        hint.classList.remove('text-red-400', 'text-gray-500');
-        hint.classList.add('text-green-400');
-        this.classList.remove('border-red-500');
-        this.classList.add('border-green-500');
-    } else {
-        hint.textContent = '4-20 characters (letters and numbers only)';
-        hint.classList.remove('text-red-400', 'text-green-400');
-        hint.classList.add('text-gray-500');
-        this.classList.remove('border-red-500', 'border-green-500');
-    }
-});
-
-// Helper function to validate URL
+// Helper Functions
 function isValidUrl(string) {
     try {
         const url = new URL(string);
@@ -262,127 +305,63 @@ function isValidUrl(string) {
     }
 }
 
-// Form submission with validation
-document.getElementById('shortenForm').addEventListener('submit', function(e) {
-    const urlInput = document.getElementById('original_url');
-    const url = urlInput.value.trim();
+function showError(message) {
+    const errorEl = document.getElementById('urlError');
+    errorEl.textContent = message;
+    errorEl.classList.remove('hidden');
     
-    if (!url) {
-        e.preventDefault();
-        urlInput.classList.add('border-red-500');
-        showTemporaryError('Please enter a URL to shorten.');
-        return;
-    }
-    
-    if (!isValidUrl(url)) {
-        e.preventDefault();
-        urlInput.classList.add('border-red-500');
-        showTemporaryError('Please enter a valid URL (http:// or https://).');
-        return;
-    }
-    
-    // Disable button to prevent double submission
-    const btn = document.getElementById('shortenBtn');
-    btn.disabled = true;
-    btn.textContent = 'Shortening...';
-    btn.classList.add('opacity-50');
-});
-
-// Show temporary error message
-function showTemporaryError(message) {
-    // Check if error banner already exists
-    let errorBanner = document.getElementById('temp-error');
-    if (errorBanner) {
-        errorBanner.remove();
-    }
-    
-    // Create error banner
-    const banner = document.createElement('div');
-    banner.id = 'temp-error';
-    banner.className = 'max-w-2xl mx-auto mb-4 bg-red-500/90 backdrop-blur-sm text-white p-4 rounded-lg shadow-lg border border-red-400 transform transition-all duration-300';
-    banner.innerHTML = `
-        <div class="flex items-center justify-between">
-            <div class="flex items-center">
-                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <span>${message}</span>
-            </div>
-            <button onclick="this.parentElement.parentElement.remove()" class="text-white hover:text-gray-200 transition">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-            </button>
-        </div>
-    `;
-    
-    // Insert before the form
-    const form = document.getElementById('shortenForm');
-    form.parentNode.insertBefore(banner, form);
-    
-    // Auto-dismiss after 5 seconds
+    // Auto-hide after 5 seconds
     setTimeout(() => {
-        if (banner) {
-            banner.style.opacity = '0';
-            banner.style.transform = 'translateY(-20px)';
-            setTimeout(() => banner.remove(), 300);
-        }
+        errorEl.classList.add('hidden');
     }, 5000);
 }
 
-// Re-enable button on page load if there was an error
-document.addEventListener('DOMContentLoaded', function() {
-    const btn = document.getElementById('shortenBtn');
-    btn.disabled = false;
-    btn.textContent = 'Shorten URL';
-    btn.classList.remove('opacity-50');
-});
+function showResult(shortUrl, shortCode) {
+    const container = document.getElementById('resultContainer');
+    const input = document.getElementById('shortUrlResult');
+    const link = document.getElementById('resultLink');
+    
+    input.value = shortUrl;
+    link.href = '/' + shortCode;
+    
+    container.classList.remove('hidden');
+    container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
 
-// Clear form fields on successful submission
-@if(session('success'))
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('original_url').value = '';
-        document.getElementById('custom_code').value = '';
-    });
-@endif
+function copyResult() {
+    const input = document.getElementById('shortUrlResult');
+    input.select();
+    document.execCommand('copy');
+    
+    const btn = event.target;
+    const originalText = btn.textContent;
+    btn.textContent = 'Copied!';
+    btn.classList.add('bg-green-600');
+    setTimeout(() => {
+        btn.textContent = originalText;
+        btn.classList.remove('bg-green-600');
+    }, 2000);
+}
+
+function dismissResult() {
+    const container = document.getElementById('resultContainer');
+    container.classList.add('hidden');
+}
+
+async function updateStats() {
+    try {
+        const response = await fetch('/api/stats');
+        const data = await response.json();
+        if (data.success) {
+            document.getElementById('totalLinks').textContent = data.total_links || 0;
+            document.getElementById('totalClicks').textContent = data.total_clicks || 0;
+        }
+    } catch (error) {
+        // Silently fail - stats are cosmetic
+    }
+}
+
+// Initial stats load
+document.addEventListener('DOMContentLoaded', updateStats);
 </script>
-
-<style>
-/* Custom scrollbar */
-::-webkit-scrollbar {
-    width: 8px;
-}
-::-webkit-scrollbar-track {
-    background: #1a1a1a;
-}
-::-webkit-scrollbar-thumb {
-    background: #4a5568;
-    border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-    background: #718096;
-}
-
-/* Banner animations */
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-#success-banner, #error-banner, #temp-error {
-    animation: slideDown 0.5s ease-out forwards;
-}
-
-/* Form input focus styles */
-input:focus {
-    outline: none;
-    ring: 2px solid #3b82f6;
-}
-</style>
 @endsection
