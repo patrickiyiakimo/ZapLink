@@ -194,37 +194,18 @@
             <!-- Features Section -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20 max-w-5xl mx-auto">
                 <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:border-blue-500 transition duration-300">
-                    <div class="text-4xl mb-4">🚀</div>
                     <h3 class="text-gray-900 font-semibold text-lg mb-2">Lightning Fast</h3>
                     <p class="text-gray-600">Create short links instantly with our optimized URL shortening engine.</p>
                 </div>
                 
                 <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:border-blue-500 transition duration-300">
-                    <div class="text-4xl mb-4">📊</div>
                     <h3 class="text-gray-900 font-semibold text-lg mb-2">Real-time Analytics</h3>
                     <p class="text-gray-600">Track every click with detailed statistics and geographic data.</p>
                 </div>
                 
                 <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:border-blue-500 transition duration-300">
-                    <div class="text-4xl mb-4">🔒</div>
                     <h3 class="text-gray-900 font-semibold text-lg mb-2">Secure & Reliable</h3>
                     <p class="text-gray-600">Your links are safe with built-in security and spam protection.</p>
-                </div>
-            </div>
-            
-            <!-- Stats -->
-            <div class="mt-16 flex justify-center space-x-8 text-gray-900">
-                <div class="text-center">
-                    <div class="text-3xl font-bold text-blue-600" id="totalLinks">0</div>
-                    <div class="text-gray-600">Links Created</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-3xl font-bold text-blue-600" id="totalClicks">0</div>
-                    <div class="text-gray-600">Clicks Tracked</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-3xl font-bold text-blue-600">99.9%</div>
-                    <div class="text-gray-600">Uptime</div>
                 </div>
             </div>
         </div>

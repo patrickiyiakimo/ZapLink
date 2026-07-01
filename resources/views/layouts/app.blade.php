@@ -22,7 +22,7 @@
             <div class="container mx-auto px-4">
                 <div class="flex justify-between items-center h-16">
                     <a href="{{ route('home') }}" class="text-white text-xl font-bold">
-                        ⚡ ZapLink
+                         ZapLink
                     </a>
                     
                     <div class="flex space-x-4 items-center">
