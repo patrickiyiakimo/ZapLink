@@ -25,7 +25,7 @@
             </p>
             
             <!-- URL Shortener Form -->
-            <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-xl p-6 border border-gray-200">
+            <div class="max-w-2xl mx-auto bg-white rounded-lg p-6 border border-gray-200">
                 @guest
                     <!-- Signup Required Notification -->
                     <div class="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
@@ -36,11 +36,11 @@
                             </div>
                             <div class="flex gap-2">
                                 <a href="{{ route('register') }}" 
-                                   class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+                                   class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm font-medium transition">
                                     Sign Up Free
                                 </a>
                                 <a href="{{ route('login') }}" 
-                                   class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition">
+                                   class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 text-sm font-medium transition">
                                     Log In
                                 </a>
                             </div>
@@ -48,6 +48,7 @@
                     </div>
                 @endauth
 
+                
                 <!-- Results Container -->
                 <div id="resultContainer" class="hidden mb-6">
                     <div class="bg-green-50 border border-green-200 text-green-800 p-4 rounded-lg">
@@ -136,30 +137,6 @@
                         <span class="text-gray-600">Shortening your URL...</span>
                     </div>
                 </div>
-
-                <!-- Validation Rules Info -->
-                <div class="mt-4 pt-4 border-t border-gray-200">
-                    <div class="flex flex-wrap gap-2 text-xs text-gray-500">
-                        <span class="flex items-center">
-                            <svg class="w-3 h-3 mr-1 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            Valid URLs only
-                        </span>
-                        <span class="flex items-center">
-                            <svg class="w-3 h-3 mr-1 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            No duplicate short URLs
-                        </span>
-                        <span class="flex items-center">
-                            <svg class="w-3 h-3 mr-1 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            Cannot shorten ZapLink URLs
-                        </span>
-                    </div>
-                </div>
             </div>
             
             <!-- How It Works Section -->
@@ -210,6 +187,7 @@
         </div>
     </div>
 </div>
+
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
