@@ -102,7 +102,7 @@
                             <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
                         @enderror
                         <p class="mt-2 text-sm text-gray-500">
-                            <span class="text-blue-600">⏰</span> Leave blank for permanent link
+                            Leave blank for permanent link
                         </p>
                     </div>
                 </div>
@@ -149,7 +149,7 @@
                 <!-- Submit Buttons -->
                 <div class="flex flex-col sm:flex-row gap-4 pt-4 border-t border-gray-200">
                     <button type="submit" 
-                            class="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center">
+                            class="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-6 transition duration-200 flex items-center justify-center">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
                         </svg>
@@ -157,7 +157,7 @@
                     </button>
                     
                     <a href="{{ route('links.index') }}" 
-                       class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-6 rounded-lg transition duration-200 text-center">
+                       class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-6 transition duration-200 text-center">
                         Cancel
                     </a>
                 </div>
@@ -168,7 +168,6 @@
         <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="bg-gray-50 rounded-lg border border-gray-200 p-4">
                 <div class="flex items-start">
-                    <div class="text-2xl mr-3">📊</div>
                     <div>
                         <h4 class="text-gray-900 font-semibold">Track Every Click</h4>
                         <p class="text-gray-600 text-sm mt-1">
@@ -180,7 +179,6 @@
             
             <div class="bg-gray-50 rounded-lg border border-gray-200 p-4">
                 <div class="flex items-start">
-                    <div class="text-2xl mr-3">🔒</div>
                     <div>
                         <h4 class="text-gray-900 font-semibold">Security First</h4>
                         <p class="text-gray-600 text-sm mt-1">
@@ -192,7 +190,6 @@
 
             <div class="bg-gray-50 rounded-lg border border-gray-200 p-4">
                 <div class="flex items-start">
-                    <div class="text-2xl mr-3">⚡</div>
                     <div>
                         <h4 class="text-gray-900 font-semibold">Lightning Fast</h4>
                         <p class="text-gray-600 text-sm mt-1">
@@ -204,7 +201,6 @@
 
             <div class="bg-gray-50 rounded-lg border border-gray-200 p-4">
                 <div class="flex items-start">
-                    <div class="text-2xl mr-3">♾️</div>
                     <div>
                         <h4 class="text-gray-900 font-semibold">Never Expires</h4>
                         <p class="text-gray-600 text-sm mt-1">
@@ -220,13 +216,13 @@
             @php
                 $recentLinks = App\Models\Link::where('user_id', auth()->id())
                                               ->latest()
-                                              ->limit(3)
+                                              ->limit(5)
                                               ->get();
             @endphp
             
             @if($recentLinks->count() > 0)
                 <div class="mt-8 bg-gray-50 rounded-lg border border-gray-200 p-4">
-                    <h4 class="text-gray-900 font-semibold mb-3">📌 Your Recent Links</h4>
+                    <h4 class="text-gray-900 font-semibold mb-3">Your Recent Links</h4>
                     <div class="space-y-2">
                         @foreach($recentLinks as $recent)
                             <div class="flex justify-between items-center bg-white px-3 py-2 rounded border border-gray-200">
