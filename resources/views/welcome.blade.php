@@ -133,7 +133,6 @@
                 <!-- Loading Spinner -->
                 <div id="loadingSpinner" class="hidden mt-4">
                     <div class="flex items-center justify-center space-x-2">
-                        <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
                         <span class="text-gray-600">Shortening your URL...</span>
                     </div>
                 </div>
@@ -324,7 +323,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 showError(data.message || 'Something went wrong.');
             }
         } catch (error) {
-            showError('An error occurred. Please try again.');
+            showError('The Link is already a ZapLink shortened link. Please try a different URL.');
             console.error('Error:', error);
         } finally {
             // Re-enable button
