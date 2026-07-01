@@ -15,7 +15,7 @@
     
     @stack('styles')
 </head>
-<body class="bg-gray-800 antialiased">
+<body class="bg-white antialiased">
     <div id="app">
         <!-- Navigation -->
         <nav class="bg-gray-900 border-b border-gray-700">

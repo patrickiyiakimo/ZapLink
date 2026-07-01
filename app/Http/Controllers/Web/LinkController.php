@@ -110,6 +110,24 @@ public function store(StoreLinkRequest $request)
         
         return view('links.show', compact('link', 'analytics'));
     }
+
+    public function destroy(string $shortCode)
+    {
+        $link = Link::where('short_code', $shortCode)->firstOrFail();
+        
+        // Ensure the authenticated user owns the link
+        if (auth()->id() !== $link->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
+        
+        try {
+            $link->delete();
+            return redirect()->route('links.index')->with('success', 'Link deleted successfully.');
+        } catch (\Exception $e) {
+            Log::error('Failed to delete link: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to delete the link. Please try again.');
+        }
+    }
     
     /**
      * Redirect to the original URL.

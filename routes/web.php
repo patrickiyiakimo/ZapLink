@@ -29,6 +29,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/links/create', [LinkController::class, 'create'])->name('links.create');
     Route::post('/links', [LinkController::class, 'store'])->name('links.store');
     Route::get('/links/{shortCode}', [LinkController::class, 'show'])->name('links.show');
+    Route::delete('/links/{shortCode}', [LinkController::class, 'destroy'])->name('links.destroy');
 });
 
 // ============ REDIRECT ROUTE - MUST BE LAST! ============
