@@ -8,46 +8,68 @@
 @endsection
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
+<div class="min-h-screen bg-white">
     <div class="container mx-auto px-4 py-16">
         <div class="text-center">
             <!-- Hero Section -->
-            <h1 class="text-5xl md:text-6xl font-bold text-white mb-6">
-                ⚡ ZapLink
-                <span class="block text-2xl md:text-3xl text-blue-400 mt-2">
+            <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+                 ZapLink
+                <span class="block text-2xl md:text-3xl text-blue-600 mt-2">
                     Shorten Your URLs in a Flash
                 </span>
             </h1>
             
-            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+            <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
                 Create short, memorable links that you can share anywhere.
                 Track clicks, analyze traffic, and boost your engagement.
             </p>
             
             <!-- URL Shortener Form -->
-            <div class="max-w-2xl mx-auto bg-gray-800 rounded-lg shadow-xl p-6 border border-gray-700">
+            <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-xl p-6 border border-gray-200">
+                @guest
+                    <!-- Signup Required Notification -->
+                    <div class="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <div class="flex items-center justify-between flex-wrap gap-2">
+                            <div class="flex items-center">
+                                
+                                <span class="text-blue-800 font-medium">Create a free account to start shortening URLs</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <a href="{{ route('register') }}" 
+                                   class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+                                    Sign Up Free
+                                </a>
+                                <a href="{{ route('login') }}" 
+                                   class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition">
+                                    Log In
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                @endauth
+
                 <!-- Results Container -->
                 <div id="resultContainer" class="hidden mb-6">
-                    <div class="bg-green-500/20 border border-green-400 text-green-300 p-4 rounded-lg">
+                    <div class="bg-green-50 border border-green-200 text-green-800 p-4 rounded-lg">
                         <div class="flex items-center justify-between">
                             <div class="flex-1">
                                 <p class="text-sm font-medium">Your short URL is ready!</p>
                                 <div class="flex items-center mt-2 space-x-2">
                                     <input type="text" 
                                            id="shortUrlResult" 
-                                           class="flex-1 bg-gray-700 text-white px-4 py-2 rounded border border-gray-600" 
+                                           class="flex-1 bg-gray-50 text-gray-900 px-4 py-2 rounded border border-gray-300" 
                                            readonly>
                                     <button onclick="copyResult()" 
                                             class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition">
                                         Copy
                                     </button>
                                     <a href="#" id="resultLink" 
-                                       class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded transition">
+                                       class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded transition">
                                         View
                                     </a>
                                 </div>
                             </div>
-                            <button onclick="dismissResult()" class="ml-4 text-gray-400 hover:text-white">
+                            <button onclick="dismissResult()" class="ml-4 text-gray-500 hover:text-gray-700">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                 </svg>
@@ -65,36 +87,45 @@
                                    name="original_url" 
                                    id="original_url"
                                    placeholder="Paste your long URL here..."
-                                   class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 transition"
-                                   required>
-                            <div id="urlError" class="text-red-400 text-sm mt-1 text-left hidden"></div>
+                                   class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                                   @auth required @else disabled @endauth
+                                   @guest style="cursor: not-allowed; opacity: 0.7;" @endguest>
+                            <div id="urlError" class="text-red-600 text-sm mt-1 text-left hidden"></div>
+                            @guest
+                                <div class="absolute inset-0 flex items-center justify-center bg-white/80 rounded-lg">
+                                    <span class="text-gray-500 text-sm font-medium">Sign in to shorten URLs</span>
+                                </div>
+                            @endguest
                         </div>
                         
                         <button type="submit" 
                                 id="shortenBtn"
-                                class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-200 whitespace-nowrap">
+                                @guest disabled @endguest
+                                class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-200 whitespace-nowrap @guest opacity-50 cursor-not-allowed @endguest">
                             Shorten URL
                         </button>
                     </div>
                     
                     <div class="flex flex-col md:flex-row gap-4 text-sm">
                         <div class="flex-1">
-                            <label class="text-gray-400 block text-left mb-1">Custom Code (Optional)</label>
+                            <label class="text-gray-700 block text-left mb-1">Custom Code (Optional)</label>
                             <input type="text" 
                                    name="custom_code" 
                                    id="custom_code"
                                    placeholder="my-custom-link"
-                                   class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500">
+                                   @auth @else disabled @endauth
+                                   class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @guest opacity-50 cursor-not-allowed @endguest">
                             <p class="text-gray-500 text-xs mt-1 text-left" id="customCodeHint">4-20 characters (letters and numbers only)</p>
                         </div>
                         
                         <div class="flex-1">
-                            <label class="text-gray-400 block text-left mb-1">Expires (Optional)</label>
+                            <label class="text-gray-700 block text-left mb-1">Expires (Optional)</label>
                             <input type="datetime-local" 
                                    name="expires_at"
                                    id="expires_at"
+                                   @auth @else disabled @endauth
                                    min="{{ now()->addDay()->format('Y-m-d\TH:i') }}"
-                                   class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500">
+                                   class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @guest opacity-50 cursor-not-allowed @endguest">
                         </div>
                     </div>
                 </form>
@@ -102,28 +133,28 @@
                 <!-- Loading Spinner -->
                 <div id="loadingSpinner" class="hidden mt-4">
                     <div class="flex items-center justify-center space-x-2">
-                        <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
-                        <span class="text-gray-300">Shortening your URL...</span>
+                        <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                        <span class="text-gray-600">Shortening your URL...</span>
                     </div>
                 </div>
 
                 <!-- Validation Rules Info -->
-                <div class="mt-4 pt-4 border-t border-gray-700">
-                    <div class="flex flex-wrap gap-2 text-xs text-gray-400">
+                <div class="mt-4 pt-4 border-t border-gray-200">
+                    <div class="flex flex-wrap gap-2 text-xs text-gray-500">
                         <span class="flex items-center">
-                            <svg class="w-3 h-3 mr-1 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-3 h-3 mr-1 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
                             Valid URLs only
                         </span>
                         <span class="flex items-center">
-                            <svg class="w-3 h-3 mr-1 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-3 h-3 mr-1 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
                             No duplicate short URLs
                         </span>
                         <span class="flex items-center">
-                            <svg class="w-3 h-3 mr-1 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-3 h-3 mr-1 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
                             Cannot shorten ZapLink URLs
@@ -132,40 +163,68 @@
                 </div>
             </div>
             
+            <!-- How It Works Section -->
+            <div class="mt-20">
+                <h2 class="text-3xl font-bold text-gray-900 mb-12">How It Works</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl font-bold text-blue-600">1</span>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Paste Your URL</h3>
+                        <p class="text-gray-600">Copy and paste your long URL into the field above</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl font-bold text-blue-600">2</span>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Customize It</h3>
+                        <p class="text-gray-600">Add a custom code or set an expiration date if needed</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl font-bold text-blue-600">3</span>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Share & Track</h3>
+                        <p class="text-gray-600">Copy your short link and start sharing it with the world</p>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Features Section -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 max-w-5xl mx-auto">
-                <div class="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-blue-500 transition duration-300">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20 max-w-5xl mx-auto">
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:border-blue-500 transition duration-300">
                     <div class="text-4xl mb-4">🚀</div>
-                    <h3 class="text-white font-semibold text-lg mb-2">Lightning Fast</h3>
-                    <p class="text-gray-400">Create short links instantly with our optimized URL shortening engine.</p>
+                    <h3 class="text-gray-900 font-semibold text-lg mb-2">Lightning Fast</h3>
+                    <p class="text-gray-600">Create short links instantly with our optimized URL shortening engine.</p>
                 </div>
                 
-                <div class="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-blue-500 transition duration-300">
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:border-blue-500 transition duration-300">
                     <div class="text-4xl mb-4">📊</div>
-                    <h3 class="text-white font-semibold text-lg mb-2">Real-time Analytics</h3>
-                    <p class="text-gray-400">Track every click with detailed statistics and geographic data.</p>
+                    <h3 class="text-gray-900 font-semibold text-lg mb-2">Real-time Analytics</h3>
+                    <p class="text-gray-600">Track every click with detailed statistics and geographic data.</p>
                 </div>
                 
-                <div class="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-blue-500 transition duration-300">
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:border-blue-500 transition duration-300">
                     <div class="text-4xl mb-4">🔒</div>
-                    <h3 class="text-white font-semibold text-lg mb-2">Secure & Reliable</h3>
-                    <p class="text-gray-400">Your links are safe with built-in security and spam protection.</p>
+                    <h3 class="text-gray-900 font-semibold text-lg mb-2">Secure & Reliable</h3>
+                    <p class="text-gray-600">Your links are safe with built-in security and spam protection.</p>
                 </div>
             </div>
             
             <!-- Stats -->
-            <div class="mt-16 flex justify-center space-x-8 text-white">
+            <div class="mt-16 flex justify-center space-x-8 text-gray-900">
                 <div class="text-center">
-                    <div class="text-3xl font-bold text-blue-400" id="totalLinks">0</div>
-                    <div class="text-gray-400">Links Created</div>
+                    <div class="text-3xl font-bold text-blue-600" id="totalLinks">0</div>
+                    <div class="text-gray-600">Links Created</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-3xl font-bold text-blue-400" id="totalClicks">0</div>
-                    <div class="text-gray-400">Clicks Tracked</div>
+                    <div class="text-3xl font-bold text-blue-600" id="totalClicks">0</div>
+                    <div class="text-gray-600">Clicks Tracked</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-3xl font-bold text-blue-400">99.9%</div>
-                    <div class="text-gray-400">Uptime</div>
+                    <div class="text-3xl font-bold text-blue-600">99.9%</div>
+                    <div class="text-gray-600">Uptime</div>
                 </div>
             </div>
         </div>
@@ -201,29 +260,30 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (code && !/^[a-zA-Z0-9]+$/.test(code)) {
             hint.textContent = '❌ Only letters and numbers allowed';
-            hint.classList.add('text-red-400');
+            hint.classList.add('text-red-600');
             hint.classList.remove('text-gray-500');
             this.classList.add('border-red-500');
         } else if (code && (code.length < 4 || code.length > 20)) {
             hint.textContent = '❌ Must be 4-20 characters';
-            hint.classList.add('text-red-400');
+            hint.classList.add('text-red-600');
             hint.classList.remove('text-gray-500');
             this.classList.add('border-red-500');
         } else if (code) {
             hint.textContent = '✅ Valid custom code';
-            hint.classList.remove('text-red-400', 'text-gray-500');
-            hint.classList.add('text-green-400');
+            hint.classList.remove('text-red-600', 'text-gray-500');
+            hint.classList.add('text-green-600');
             this.classList.remove('border-red-500');
             this.classList.add('border-green-500');
         } else {
             hint.textContent = '4-20 characters (letters and numbers only)';
-            hint.classList.remove('text-red-400', 'text-green-400');
+            hint.classList.remove('text-red-600', 'text-green-600');
             hint.classList.add('text-gray-500');
             this.classList.remove('border-red-500', 'border-green-500');
         }
     });
 
-    // Form submission via AJAX
+    // Form submission via AJAX (only for authenticated users)
+    @auth
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
         
@@ -293,6 +353,7 @@ document.addEventListener('DOMContentLoaded', function() {
             loadingSpinner.classList.add('hidden');
         }
     });
+    @endauth
 });
 
 // Helper Functions
