@@ -48,7 +48,7 @@
                     </div>
                 @endauth
 
-                
+
                 <!-- Results Container -->
                 <div id="resultContainer" class="hidden mb-6">
                     <div class="bg-green-50 border border-green-200 text-green-800 p-4 rounded-lg">
@@ -61,11 +61,11 @@
                                            class="flex-1 bg-gray-50 text-gray-900 px-4 py-2 rounded border border-gray-300" 
                                            readonly>
                                     <button onclick="copyResult()" 
-                                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition">
+                                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 transition">
                                         Copy
                                     </button>
                                     <a href="#" id="resultLink" 
-                                       class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded transition">
+                                       class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2  transition">
                                         View
                                     </a>
                                 </div>
@@ -102,11 +102,12 @@
                         <button type="submit" 
                                 id="shortenBtn"
                                 @guest disabled @endguest
-                                class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-200 whitespace-nowrap @guest opacity-50 cursor-not-allowed @endguest">
+                                class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold transition duration-200 whitespace-nowrap @guest opacity-50 cursor-not-allowed @endguest">
                             Shorten URL
                         </button>
                     </div>
                     
+
                     <div class="flex flex-col md:flex-row gap-4 text-sm">
                         <div class="flex-1">
                             <label class="text-gray-700 block text-left mb-1">Custom Code (Optional)</label>
