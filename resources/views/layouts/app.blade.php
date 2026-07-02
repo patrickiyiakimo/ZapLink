@@ -38,7 +38,7 @@
                             </form>
                         @else
                             <a href="{{ route('login') }}" class="text-gray-600 hover:text-gray-900 font-medium transition">Log In</a>
-                            <a href="{{ route('register') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2 rounded-lg transition shadow-sm hover:shadow-md">
+                            <a href="{{ route('register') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2 transition shadow-sm hover:shadow-md">
                                 Sign Up Free
                             </a>
                         @endauth
