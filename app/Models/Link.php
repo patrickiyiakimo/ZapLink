@@ -10,9 +10,6 @@ class Link extends Model
 {
     use HasFactory;
     
-    // Remove SoftDeletes trait
-    // Remove: use SoftDeletes;
-    
     protected $fillable = [
         'user_id',
         'original_url',

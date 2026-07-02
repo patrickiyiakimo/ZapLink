@@ -46,7 +46,7 @@
                                         <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">Inactive</span>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4 space-x-3">
+                                <td class="px-6 py-4 space-x-3 ">
                                     <a href="{{ route('links.show', $link->short_code) }}" 
                                        class="text-blue-600 hover:text-blue-800 font-medium">View</a>
                                     <form action="{{ route('links.destroy', $link->short_code) }}" method="POST" class="inline">

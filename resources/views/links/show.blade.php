@@ -102,7 +102,7 @@
         
         <!-- Analytics Section -->
         <div class="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
-            <h2 class="text-xl font-bold text-gray-900 mb-4">📊 Analytics</h2>
+            <h2 class="text-xl font-bold text-gray-900 mb-4">Analytics</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div class="bg-gray-50 p-4 rounded border border-gray-200">
@@ -133,7 +133,6 @@
                 </div>
             @else
                 <div class="text-center py-8 text-gray-500">
-                    <p class="text-4xl mb-2">📊</p>
                     <p>No visits recorded yet.</p>
                     <p class="text-sm mt-1">Start sharing your link to see analytics!</p>
                 </div>
