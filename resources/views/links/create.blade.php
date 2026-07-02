@@ -13,7 +13,7 @@
         </div>
 
         <!-- Main Form Card -->
-        <div class="bg-white rounded-lg border border-gray-200 shadow-xl p-6 md:p-8">
+        <div class="bg-white border border-gray-200 shadow-xl p-6 md:p-8">
             <form action="{{ route('links.store') }}" method="POST" id="createLinkForm">
                 @csrf
                 
@@ -33,7 +33,7 @@
                                name="original_url" 
                                value="{{ old('original_url') }}"
                                placeholder="Paste your long URL here..."
-                               class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('original_url') border-red-500 @enderror"
+                               class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('original_url') border-red-500 @enderror"
                                required
                                autofocus>
                     </div>
@@ -55,7 +55,7 @@
                            name="title" 
                            value="{{ old('title') }}"
                            placeholder="My Awesome Link - Give it a memorable name"
-                           class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('title') border-red-500 @enderror">
+                           class="w-full px-4 py-3 bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('title') border-red-500 @enderror">
                     @error('title')
                         <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
                     @enderror
@@ -77,13 +77,13 @@
                                    name="custom_code" 
                                    value="{{ old('custom_code') }}"
                                    placeholder="my-custom-link"
-                                   class="w-full pl-32 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('custom_code') border-red-500 @enderror">
+                                   class="w-full pl-32 pr-4 py-3 bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('custom_code') border-red-500 @enderror">
                         </div>
                         @error('custom_code')
                             <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
                         @enderror
                         <p class="mt-2 text-sm text-gray-500">
-                             4-20 characters (letters and numbers only)
+                            4-20 characters (letters and numbers only)
                         </p>
                     </div>
 
@@ -97,7 +97,7 @@
                                name="expires_at" 
                                value="{{ old('expires_at') }}"
                                min="{{ now()->addDay()->format('Y-m-d\TH:i') }}"
-                               class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('expires_at') border-red-500 @enderror">
+                               class="w-full px-4 py-3 bg-gray-50 border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('expires_at') border-red-500 @enderror">
                         @error('expires_at')
                             <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
                         @enderror
@@ -128,7 +128,7 @@
                                    id="tags" 
                                    name="tags" 
                                    placeholder="marketing, social, campaign"
-                                   class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                   class="w-full px-4 py-3 bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                             <p class="mt-2 text-sm text-gray-500">Separate tags with commas</p>
                         </div>
 
@@ -141,12 +141,12 @@
                                       name="notes" 
                                       rows="3" 
                                       placeholder="Add any notes about this link..."
-                                      class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                                      class="w-full px-4 py-3 bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
                         </div>
                     </div>
                 </div>
 
-                <!-- Submit Buttons -->
+                <!-- Submit Buttons - SQUARE EDGES -->
                 <div class="flex flex-col sm:flex-row gap-4 pt-4 border-t border-gray-200">
                     <button type="submit" 
                             class="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-6 transition duration-200 flex items-center justify-center">
@@ -166,7 +166,7 @@
 
         <!-- Quick Tips Card -->
         <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="bg-gray-50 rounded-lg border border-gray-200 p-4">
+            <div class="bg-gray-50 border border-gray-200 p-4">
                 <div class="flex items-start">
                     <div>
                         <h4 class="text-gray-900 font-semibold">Track Every Click</h4>
@@ -177,7 +177,7 @@
                 </div>
             </div>
             
-            <div class="bg-gray-50 rounded-lg border border-gray-200 p-4">
+            <div class="bg-gray-50 border border-gray-200 p-4">
                 <div class="flex items-start">
                     <div>
                         <h4 class="text-gray-900 font-semibold">Security First</h4>
@@ -188,7 +188,7 @@
                 </div>
             </div>
 
-            <div class="bg-gray-50 rounded-lg border border-gray-200 p-4">
+            <div class="bg-gray-50 border border-gray-200 p-4">
                 <div class="flex items-start">
                     <div>
                         <h4 class="text-gray-900 font-semibold">Lightning Fast</h4>
@@ -199,7 +199,7 @@
                 </div>
             </div>
 
-            <div class="bg-gray-50 rounded-lg border border-gray-200 p-4">
+            <div class="bg-gray-50 border border-gray-200 p-4">
                 <div class="flex items-start">
                     <div>
                         <h4 class="text-gray-900 font-semibold">Never Expires</h4>
@@ -221,11 +221,11 @@
             @endphp
             
             @if($recentLinks->count() > 0)
-                <div class="mt-8 bg-gray-50 rounded-lg border border-gray-200 p-4">
+                <div class="mt-8 bg-gray-50 border border-gray-200 p-4">
                     <h4 class="text-gray-900 font-semibold mb-3">Your Recent Links</h4>
                     <div class="space-y-2">
                         @foreach($recentLinks as $recent)
-                            <div class="flex justify-between items-center bg-white px-3 py-2 rounded border border-gray-200">
+                            <div class="flex justify-between items-center bg-white px-3 py-2 border border-gray-200">
                                 <div class="flex-1 min-w-0">
                                     <a href="{{ route('links.show', $recent->short_code) }}" 
                                        class="text-blue-600 hover:text-blue-700 text-sm truncate block">
@@ -335,10 +335,34 @@ document.getElementById('title').addEventListener('input', function() {
 }
 ::-webkit-scrollbar-thumb {
     background: #9ca3af;
-    border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
     background: #6b7280;
+}
+
+/* Remove all rounded corners from buttons and inputs */
+button, 
+input, 
+textarea,
+a.btn,
+[class*="rounded"] {
+    border-radius: 0 !important;
+}
+
+/* But keep the form card's border style but without radius */
+.bg-white.border {
+    border-radius: 0 !important;
+}
+
+/* Focus ring without radius */
+input:focus, textarea:focus, select:focus {
+    border-radius: 0 !important;
+}
+
+/* Remove radius from status badges in recent links */
+.bg-gray-50 .border, 
+.bg-white .border {
+    border-radius: 0 !important;
 }
 </style>
 @endsection

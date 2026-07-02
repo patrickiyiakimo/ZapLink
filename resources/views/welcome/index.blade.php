@@ -32,7 +32,6 @@
     </div>
 </div>
 
-
 {{-- JavaScript --}}
 @include('welcome.partials.scripts')
 @endsection

@@ -8,15 +8,14 @@ export default {
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
     ],
-     theme: {
+    theme: {
         extend: {
             fontFamily: {
-                'sans': ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
-                'heading': ['Plus Jakarta Sans', 'sans-serif'],
-                'body': ['Plus Jakarta Sans', 'sans-serif'],
+                sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', ...defaultTheme.fontFamily.sans],
+                display: ['Inter', ...defaultTheme.fontFamily.sans],
+                body: ['Inter', ...defaultTheme.fontFamily.sans],
             },
         },
     },
-
     plugins: [forms],
 };
