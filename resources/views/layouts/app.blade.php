@@ -35,7 +35,7 @@
                             <a href="{{ route('links.create') }}" class="text-gray-600 hover:text-gray-900 font-medium transition">Create</a>
                             <form action="{{ route('logout') }}" method="POST" class="inline">
                                 @csrf
-                                <button type="submit" class="text-gray-600 hover:text-gray-900 font-medium transition">Logout</button>
+                                <button type="submit" class="text-gray-600 hover:text-red-500 font-medium transition">Logout</button>
                             </form>
                         @else
                             <a href="{{ route('login') }}" class="text-gray-600 hover:text-gray-900 font-medium transition">Log In</a>
