@@ -157,6 +157,11 @@ public function store(StoreLinkRequest $request)
             Log::warning('Link not found: ' . $shortCode);
             abort(404, 'Link not found.');
         }
+
+        // Check if link is expired
+        if ($link->expires_at && $link->expires_at->isPast()) {
+            return view('links.expired', compact('link'));
+        }
         
         // Check if expired
         if ($link->expires_at && $link->expires_at->isPast()) {
