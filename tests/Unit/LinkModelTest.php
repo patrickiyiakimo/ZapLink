@@ -5,6 +5,8 @@ use App\Models\Link;
 use App\Models\User;
 use App\Models\Visit;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 
 uses(RefreshDatabase::class);
 
@@ -54,29 +56,32 @@ test('it has default attribute values', function () {
 // ============================================
 
 test('it belongs to a user', function () {
-    $user = User::factory()->create();
-    $link = Link::factory()->create(['user_id' => $user->id]);
+    // Create a user directly
+    $user = createUser();
+    
+    // Create a link with user_id
+    $link = createLink(['user_id' => $user->id]);
 
     expect($link->user)->toBeInstanceOf(User::class);
     expect($link->user->id)->toBe($user->id);
 });
 
 test('it returns null for user when user does not exist', function () {
-    $link = Link::factory()->create(['user_id' => 999]);
+    $link = createLink(['user_id' => 999]);
 
     expect($link->user)->toBeNull();
 });
 
 test('it has many visits', function () {
-    $link = Link::factory()->create();
-    Visit::factory()->count(3)->create(['link_id' => $link->id]);
+    $link = createLink();
+    createVisits($link->id, 3);
 
     expect($link->visits)->toHaveCount(3);
     expect($link->visits->first())->toBeInstanceOf(Visit::class);
 });
 
 test('it returns empty collection for visits when none exist', function () {
-    $link = Link::factory()->create();
+    $link = createLink();
 
     expect($link->visits)->toBeEmpty();
     expect($link->visits)->toHaveCount(0);
@@ -87,7 +92,7 @@ test('it returns empty collection for visits when none exist', function () {
 // ============================================
 
 test('it returns short url attribute', function () {
-    $link = Link::factory()->create(['short_code' => 'abc123']);
+    $link = createLink(['short_code' => 'abc123']);
 
     $expectedShortUrl = config('app.url') . '/abc123';
     expect($link->short_url)->toBe($expectedShortUrl);
@@ -95,7 +100,7 @@ test('it returns short url attribute', function () {
 });
 
 test('it returns is_expired true when expires_at is in past', function () {
-    $link = Link::factory()->create([
+    $link = createLink([
         'expires_at' => now()->subDay()
     ]);
 
@@ -104,7 +109,7 @@ test('it returns is_expired true when expires_at is in past', function () {
 });
 
 test('it returns is_expired false when expires_at is in future', function () {
-    $link = Link::factory()->create([
+    $link = createLink([
         'expires_at' => now()->addDay()
     ]);
 
@@ -112,7 +117,7 @@ test('it returns is_expired false when expires_at is in future', function () {
 });
 
 test('it returns is_expired false when expires_at is null', function () {
-    $link = Link::factory()->create([
+    $link = createLink([
         'expires_at' => null
     ]);
 
@@ -125,22 +130,14 @@ test('it returns is_expired false when expires_at is null', function () {
 
 test('it scopes active links only', function () {
     // Create active links
-    Link::factory()->count(2)->create([
-        'is_active' => true,
-        'expires_at' => null
-    ]);
+    createLink(['is_active' => true, 'expires_at' => null]);
+    createLink(['is_active' => true, 'expires_at' => null]);
 
     // Create inactive link
-    Link::factory()->create([
-        'is_active' => false,
-        'expires_at' => null
-    ]);
+    createLink(['is_active' => false, 'expires_at' => null]);
 
     // Create expired link (inactive despite is_active being true)
-    Link::factory()->create([
-        'is_active' => true,
-        'expires_at' => now()->subDay()
-    ]);
+    createLink(['is_active' => true, 'expires_at' => now()->subDay()]);
 
     $activeLinks = Link::active()->get();
 
@@ -149,7 +146,7 @@ test('it scopes active links only', function () {
 });
 
 test('it scopes active links excludes expired links', function () {
-    $expiredLink = Link::factory()->create([
+    $expiredLink = createLink([
         'is_active' => true,
         'expires_at' => now()->subDay()
     ]);
@@ -160,11 +157,14 @@ test('it scopes active links excludes expired links', function () {
 });
 
 test('it scopes links for specific user', function () {
-    $user1 = User::factory()->create();
-    $user2 = User::factory()->create();
+    $user1 = createUser();
+    $user2 = createUser();
 
-    Link::factory()->count(3)->create(['user_id' => $user1->id]);
-    Link::factory()->count(2)->create(['user_id' => $user2->id]);
+    createLink(['user_id' => $user1->id]);
+    createLink(['user_id' => $user1->id]);
+    createLink(['user_id' => $user1->id]);
+    createLink(['user_id' => $user2->id]);
+    createLink(['user_id' => $user2->id]);
 
     $user1Links = Link::forUser($user1->id)->get();
     $user2Links = Link::forUser($user2->id)->get();
@@ -175,7 +175,7 @@ test('it scopes links for specific user', function () {
 });
 
 test('it returns empty collection for user with no links', function () {
-    $user = User::factory()->create();
+    $user = createUser();
 
     $links = Link::forUser($user->id)->get();
 
@@ -187,8 +187,8 @@ test('it returns empty collection for user with no links', function () {
 // 5. MODEL CREATION TESTS
 // ============================================
 
-test('it can create a link with factory', function () {
-    $link = Link::factory()->create();
+test('it can create a link', function () {
+    $link = createLink();
 
     expect($link->short_code)->not->toBeNull();
     expect($link->short_code)->toBeString();
@@ -199,7 +199,7 @@ test('it can create a link with factory', function () {
 });
 
 test('it can create a link with custom attributes', function () {
-    $link = Link::factory()->create([
+    $link = createLink([
         'original_url' => 'https://custom-example.com',
         'title' => 'Custom Title',
         'short_code' => 'custom123',
@@ -216,7 +216,7 @@ test('it can create a link with custom attributes', function () {
 });
 
 test('it creates link with default clicks count', function () {
-    $link = Link::factory()->create();
+    $link = createLink();
 
     expect($link->clicks)->toBe(0);
     expect($link)->toBeInDatabase('links', [
@@ -226,7 +226,7 @@ test('it creates link with default clicks count', function () {
 });
 
 test('it creates link with default active status', function () {
-    $link = Link::factory()->create();
+    $link = createLink();
 
     expect($link->is_active)->toBeTrue();
     expect($link)->toBeInDatabase('links', [
@@ -240,7 +240,7 @@ test('it creates link with default active status', function () {
 // ============================================
 
 test('it can update link attributes', function () {
-    $link = Link::factory()->create();
+    $link = createLink();
 
     $link->update([
         'title' => 'Updated Title',
@@ -255,7 +255,7 @@ test('it can update link attributes', function () {
 });
 
 test('it can increment clicks count', function () {
-    $link = Link::factory()->create(['clicks' => 5]);
+    $link = createLink(['clicks' => 5]);
 
     $link->increment('clicks');
     $link->refresh();
@@ -264,7 +264,7 @@ test('it can increment clicks count', function () {
 });
 
 test('it can decrement clicks count', function () {
-    $link = Link::factory()->create(['clicks' => 5]);
+    $link = createLink(['clicks' => 5]);
 
     $link->decrement('clicks');
     $link->refresh();
@@ -273,7 +273,7 @@ test('it can decrement clicks count', function () {
 });
 
 test('it can toggle active status', function () {
-    $link = Link::factory()->create(['is_active' => true]);
+    $link = createLink(['is_active' => true]);
 
     $link->update(['is_active' => false]);
     $link->refresh();
@@ -291,7 +291,7 @@ test('it can toggle active status', function () {
 // ============================================
 
 test('it can delete a link', function () {
-    $link = Link::factory()->create();
+    $link = createLink();
 
     $link->delete();
 
@@ -301,8 +301,8 @@ test('it can delete a link', function () {
 });
 
 test('it deletes associated visits when link is deleted', function () {
-    $link = Link::factory()->create();
-    Visit::factory()->count(3)->create(['link_id' => $link->id]);
+    $link = createLink();
+    createVisits($link->id, 3);
 
     expect(Visit::count())->toBe(3);
 
@@ -317,9 +317,9 @@ test('it deletes associated visits when link is deleted', function () {
 // ============================================
 
 test('it can mass assign attributes', function () {
-    $user = User::factory()->create();
+    $user = createUser();
     
-    $data = [
+    $link = Link::create([
         'user_id' => $user->id,
         'original_url' => 'https://mass-assign.com',
         'short_code' => 'mass123',
@@ -327,9 +327,7 @@ test('it can mass assign attributes', function () {
         'expires_at' => now()->addDays(7),
         'is_active' => false,
         'clicks' => 50
-    ];
-
-    $link = Link::create($data);
+    ]);
 
     expect($link)->toBeInDatabase('links', [
         'id' => $link->id,
@@ -346,7 +344,7 @@ test('it can mass assign attributes', function () {
 test('it handles very long urls', function () {
     $longUrl = 'https://example.com/' . str_repeat('a', 1000);
     
-    $link = Link::factory()->create([
+    $link = createLink([
         'original_url' => $longUrl
     ]);
 
@@ -360,7 +358,7 @@ test('it handles very long urls', function () {
 test('it handles special characters in url', function () {
     $url = 'https://example.com/path?query=value&foo=bar#fragment';
     
-    $link = Link::factory()->create([
+    $link = createLink([
         'original_url' => $url
     ]);
 
@@ -370,7 +368,7 @@ test('it handles special characters in url', function () {
 test('it handles unicode urls', function () {
     $url = 'https://例子.测试/路径?参数=值';
     
-    $link = Link::factory()->create([
+    $link = createLink([
         'original_url' => $url
     ]);
 
@@ -378,7 +376,7 @@ test('it handles unicode urls', function () {
 });
 
 test('it handles empty metadata', function () {
-    $link = Link::factory()->create(['metadata' => null]);
+    $link = createLink(['metadata' => null]);
 
     expect($link->metadata)->toBeNull();
 });
@@ -386,7 +384,7 @@ test('it handles empty metadata', function () {
 test('it handles json metadata', function () {
     $metadata = ['tags' => ['laravel', 'testing'], 'notes' => 'Test link'];
     
-    $link = Link::factory()->create([
+    $link = createLink([
         'metadata' => $metadata
     ]);
 
@@ -399,19 +397,13 @@ test('it handles json metadata', function () {
 // ============================================
 
 test('it can chain scopes', function () {
-    $user = User::factory()->create();
+    $user = createUser();
     
-    Link::factory()->count(3)->create([
-        'user_id' => $user->id,
-        'is_active' => true,
-        'expires_at' => null
-    ]);
-    
-    Link::factory()->count(2)->create([
-        'user_id' => $user->id,
-        'is_active' => false,
-        'expires_at' => null
-    ]);
+    createLink(['user_id' => $user->id, 'is_active' => true, 'expires_at' => null]);
+    createLink(['user_id' => $user->id, 'is_active' => true, 'expires_at' => null]);
+    createLink(['user_id' => $user->id, 'is_active' => true, 'expires_at' => null]);
+    createLink(['user_id' => $user->id, 'is_active' => false, 'expires_at' => null]);
+    createLink(['user_id' => $user->id, 'is_active' => false, 'expires_at' => null]);
 
     $links = Link::forUser($user->id)->active()->get();
 
@@ -425,7 +417,11 @@ test('it can chain scopes', function () {
 // ============================================
 
 test('it can count links', function () {
-    Link::factory()->count(5)->create();
+    createLink();
+    createLink();
+    createLink();
+    createLink();
+    createLink();
 
     $count = Link::count();
 
@@ -433,8 +429,11 @@ test('it can count links', function () {
 });
 
 test('it can count active links', function () {
-    Link::factory()->count(3)->create(['is_active' => true, 'expires_at' => null]);
-    Link::factory()->count(2)->create(['is_active' => false]);
+    createLink(['is_active' => true, 'expires_at' => null]);
+    createLink(['is_active' => true, 'expires_at' => null]);
+    createLink(['is_active' => true, 'expires_at' => null]);
+    createLink(['is_active' => false, 'expires_at' => null]);
+    createLink(['is_active' => false, 'expires_at' => null]);
 
     $count = Link::active()->count();
 
@@ -442,24 +441,118 @@ test('it can count active links', function () {
 });
 
 // ============================================
-// 12. FACTORY STATE TESTS
+// 12. EXPIRED LINK TESTS
 // ============================================
 
-test('it can create expired link using factory state', function () {
-    $link = Link::factory()->expired()->create();
+test('it can create expired link', function () {
+    $link = createLink([
+        'expires_at' => now()->subDay()
+    ]);
 
     expect($link->is_expired)->toBeTrue();
     expect($link->expires_at)->toBeLessThan(now());
 });
 
-test('it can create inactive link using factory state', function () {
-    $link = Link::factory()->inactive()->create();
+test('it can create inactive link', function () {
+    $link = createLink([
+        'is_active' => false
+    ]);
 
     expect($link->is_active)->toBeFalse();
 });
 
-test('it can create link with custom short code using factory state', function () {
-    $link = Link::factory()->withShortCode('custom123')->create();
+test('it can create link with custom short code', function () {
+    $link = createLink([
+        'short_code' => 'custom123'
+    ]);
 
     expect($link->short_code)->toBe('custom123');
 });
+
+// ============================================
+// 13. UNIQUENESS TESTS
+// ============================================
+
+test('it requires unique short codes', function () {
+    createLink(['short_code' => 'unique123']);
+
+    expect(function () {
+        createLink(['short_code' => 'unique123']);
+    })->toThrow(\Illuminate\Database\QueryException::class);
+});
+
+// ============================================
+// 14. NULLABLE FIELD TESTS
+// ============================================
+
+test('it allows null title', function () {
+    $link = createLink(['title' => null]);
+
+    expect($link->title)->toBeNull();
+});
+
+test('it allows null expires_at', function () {
+    $link = createLink(['expires_at' => null]);
+
+    expect($link->expires_at)->toBeNull();
+});
+
+test('it allows null metadata', function () {
+    $link = createLink(['metadata' => null]);
+
+    expect($link->metadata)->toBeNull();
+});
+
+// ============================================
+// HELPER FUNCTIONS (No Factories!)
+// ============================================
+
+/**
+ * Create a user without using factories
+ */
+function createUser(array $attributes = []): User
+{
+    $defaults = [
+        'name' => 'Test User',
+        'email' => fake()->unique()->safeEmail(),
+        'password' => Hash::make('password123'),
+        'email_verified_at' => now(),
+        'remember_token' => Str::random(10),
+    ];
+
+    return User::create(array_merge($defaults, $attributes));
+}
+
+/**
+ * Create a link without using factories
+ */
+function createLink(array $attributes = []): Link
+{
+    $defaults = [
+        'user_id' => createUser()->id,
+        'original_url' => 'https://example.com/' . Str::random(10),
+        'short_code' => Str::random(6),
+        'title' => 'Test Link',
+        'expires_at' => null,
+        'is_active' => true,
+        'metadata' => null,
+        'clicks' => 0,
+    ];
+
+    return Link::create(array_merge($defaults, $attributes));
+}
+
+/**
+ * Create visits without using factories
+ */
+function createVisits(int $linkId, int $count = 1): void
+{
+    for ($i = 0; $i < $count; $i++) {
+        Visit::create([
+            'link_id' => $linkId,
+            'ip_address' => fake()->ipv4(),
+            'user_agent' => fake()->userAgent(),
+            'referer' => fake()->url(),
+        ]);
+    }
+}

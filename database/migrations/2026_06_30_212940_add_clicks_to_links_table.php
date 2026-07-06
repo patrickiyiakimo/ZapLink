@@ -9,24 +9,32 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('links', function (Blueprint $table) {
+        // ✅ CHECK IF THE TABLE EXISTS FIRST
+        if (Schema::hasTable('links')) {
             // Add clicks column if it doesn't exist
             if (!Schema::hasColumn('links', 'clicks')) {
-                $table->integer('clicks')->default(0)->after('is_active');
+                Schema::table('links', function (Blueprint $table) {
+                    $table->integer('clicks')->default(0)->after('is_active');
+                });
             }
             
-            // Remove deleted_at column if it exists (since we're not using soft deletes)
+            // Remove deleted_at column if it exists
             if (Schema::hasColumn('links', 'deleted_at')) {
-                $table->dropColumn('deleted_at');
+                Schema::table('links', function (Blueprint $table) {
+                    $table->dropColumn('deleted_at');
+                });
             }
-        });
+        }
     }
 
     public function down(): void
     {
-        Schema::table('links', function (Blueprint $table) {
-            $table->dropColumn('clicks');
-            $table->softDeletes();
-        });
+        if (Schema::hasTable('links')) {
+            if (Schema::hasColumn('links', 'clicks')) {
+                Schema::table('links', function (Blueprint $table) {
+                    $table->dropColumn('clicks');
+                });
+            }
+        }
     }
 };
