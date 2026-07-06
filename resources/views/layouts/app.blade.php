@@ -25,7 +25,7 @@
             <div class="container mx-auto px-4">
                 <div class="flex justify-between items-center h-16">
                     <a href="{{ route('home') }}" class="text-xl font-extrabold text-gray-900 tracking-tight">
-                        <img src="{{ asset('/images/Gemini_Generated_Image_derxavderxavderx.png') }}" alt="ZapLink Logo" class="h-8 inline-block mr-2">
+                        <img src="{{ asset('/images/Gemini_Generated_Image_derxavderxavderx.png') }}" alt="ZapLink Logo" class="h-8 inline-block mr-2 rounded-full">
                          ZapLink
                     </a>
                     
