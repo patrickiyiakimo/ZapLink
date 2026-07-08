@@ -342,7 +342,7 @@ test('it deletes associated visits when link is deleted', function () {
 // ============================================
 
 // test('it handles very long urls', function () {
-//     $longUrl = 'https://example.com/' . str_repeat('a', 1000);
+//     $longUrl = 'https://zaplink.com/' . str_repeat('a', 1000);
     
 //     $link = createLink([
 //         'original_url' => $longUrl
@@ -356,7 +356,7 @@ test('it deletes associated visits when link is deleted', function () {
 // });
 
 test('it handles special characters in url', function () {
-    $url = 'https://example.com/path?query=value&foo=bar#fragment';
+    $url = 'https://zaplink.com/path?query=value&foo=bar#fragment';
     
     $link = createLink([
         'original_url' => $url
@@ -530,7 +530,7 @@ function createLink(array $attributes = []): Link
 {
     $defaults = [
         'user_id' => createUser()->id,
-        'original_url' => 'https://example.com/' . Str::random(10),
+        'original_url' => 'https://zaplink.com/' . Str::random(10),
         'short_code' => Str::random(6),
         'title' => 'Test Link',
         'expires_at' => null,
