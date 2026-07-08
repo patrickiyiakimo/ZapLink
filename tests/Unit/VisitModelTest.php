@@ -1,5 +1,4 @@
 <?php
-// tests/Unit/VisitModelTest.php
 
 use App\Models\Visit;
 use App\Models\Link;
@@ -47,12 +46,6 @@ test('it belongs to a link', function () {
     expect($visit->link)->toBeInstanceOf(Link::class);
     expect($visit->link->id)->toBe($link->id);
 });
-
-// test('it returns null for link when link does not exist', function () {
-//     $visit = createVisit(['link_id' => 999]);
-
-//     expect($visit->link)->toBeNull();
-// });
 
 // ============================================
 // 3. MODEL CREATION TESTS
@@ -114,16 +107,6 @@ test('it detects mobile device type', function () {
 
     expect($visit->device_type)->toBe('Mobile');
 });
-
-// test('it detects tablet device type', function () {
-//     $link = createLink();
-//     $visit = createVisit([
-//         'link_id' => $link->id,
-//         'user_agent' => 'Mozilla/5.0 (iPad; CPU OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1',
-//     ]);
-
-//     expect($visit->device_type)->toBe('Tablet');
-// });
 
 test('it detects bot device type', function () {
     $link = createLink();
@@ -198,26 +181,6 @@ test('it detects Safari browser', function () {
 
     expect($visit->browser)->toBe('Safari');
 });
-
-// test('it detects Edge browser', function () {
-//     $link = createLink();
-//     $visit = createVisit([
-//         'link_id' => $link->id,
-//         'user_agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36 Edg/91.0.864.59',
-//     ]);
-
-//     expect($visit->browser)->toBe('Edge');
-// });
-
-// test('it detects Opera browser', function () {
-//     $link = createLink();
-//     $visit = createVisit([
-//         'link_id' => $link->id,
-//         'user_agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36 OPR/77.0.4054.172',
-//     ]);
-
-//     expect($visit->browser)->toBe('Opera');
-// });
 
 test('it returns Other for unknown browser', function () {
     $link = createLink();

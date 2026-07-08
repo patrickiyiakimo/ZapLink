@@ -1,5 +1,4 @@
 <?php
-// tests/Unit/Services/LinkServiceTest.php
 
 use App\Services\LinkService;
 use App\Services\UrlValidatorService;
@@ -88,16 +87,6 @@ test('it throws exception for invalid URL', function () {
     expect(fn() => $this->linkService->createLink($data))
         ->toThrow(\InvalidArgumentException::class, 'Invalid or unsafe URL provided.');
 });
-
-// test('it sanitizes URL before saving', function () {
-//     $data = [
-//         'original_url' => 'example.com',
-//     ];
-
-//     $link = $this->linkService->createLink($data);
-
-//     expect($link->original_url)->toBe('https://example.com');
-// });
 
 test('it caches the link after creation', function () {
     $data = [
@@ -243,18 +232,6 @@ test('it returns null for expired link', function () {
 
     expect($result)->toBeNull();
 });
-
-// test('it returns null for inactive link', function () {
-//     $link = $this->linkService->createLink([
-//         'original_url' => 'https://example.com'
-//     ]);
-    
-//     $link->update(['is_active' => false]);
-
-//     $result = $this->linkService->resolveLink($link->short_code);
-
-//     expect($result)->toBeNull();
-// });
 
 test('it validates short code format before resolving', function () {
     $result = $this->linkService->resolveLink('invalid!@#');
