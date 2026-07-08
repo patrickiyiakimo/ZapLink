@@ -1,5 +1,4 @@
 <?php
-// tests/Unit/Services/AnalyticsServiceTest.php
 
 use App\Services\AnalyticsService;
 use App\Models\Link;
@@ -95,43 +94,6 @@ test('it counts unique visitors with null IP addresses', function () {
 // ============================================
 // 3. TIME-BASED FILTER TESTS
 // ============================================
-
-// test('it counts visits in last 24 hours', function () {
-//     $link = createLinkForAnalytics();
-    
-//     createVisitForAnalytics($link->id, ['created_at' => now()->subHours(12)]);
-//     createVisitForAnalytics($link->id, ['created_at' => now()->subHours(20)]);
-//     createVisitForAnalytics($link->id, ['created_at' => now()->subHours(48)]);
-
-//     $analytics = $this->analyticsService->getLinkAnalytics($link);
-
-//     expect($analytics['last_24_hours'])->toBe(2);
-// });
-
-// test('it counts visits in last 7 days', function () {
-//     $link = createLinkForAnalytics();
-    
-//     createVisitForAnalytics($link->id, ['created_at' => now()->subDays(2)]);
-//     createVisitForAnalytics($link->id, ['created_at' => now()->subDays(5)]);
-//     createVisitForAnalytics($link->id, ['created_at' => now()->subDays(10)]);
-
-//     $analytics = $this->analyticsService->getLinkAnalytics($link);
-
-//     expect($analytics['last_7_days'])->toBe(2);
-// });
-
-// test('it counts visits within both time periods correctly', function () {
-//     $link = createLinkForAnalytics();
-    
-//     createVisitForAnalytics($link->id, ['created_at' => now()->subHours(6)]);
-//     createVisitForAnalytics($link->id, ['created_at' => now()->subHours(18)]);
-//     createVisitForAnalytics($link->id, ['created_at' => now()->subDays(3)]);
-
-//     $analytics = $this->analyticsService->getLinkAnalytics($link);
-
-//     expect($analytics['last_24_hours'])->toBe(2);
-//     expect($analytics['last_7_days'])->toBe(3);
-// });
 
 test('it returns zero for last_24_hours when no visits', function () {
     $link = createLinkForAnalytics();
@@ -233,89 +195,12 @@ test('it orders referers by count descending', function () {
 // 5. DAILY CLICKS TESTS
 // ============================================
 
-// test('it returns daily clicks for last 30 days', function () {
-//     $link = createLinkForAnalytics();
-    
-//     $today = now();
-//     createVisitForAnalytics($link->id, ['created_at' => $today->copy()->subDays(5)]);
-//     createVisitForAnalytics($link->id, ['created_at' => $today->copy()->subDays(10)]);
-//     createVisitForAnalytics($link->id, ['created_at' => $today->copy()->subDays(20)]);
-
-//     $analytics = $this->analyticsService->getLinkAnalytics($link);
-//     $dailyClicks = $analytics['daily_clicks'];
-
-//     expect($dailyClicks)->toHaveCount(3);
-//     expect($dailyClicks[0]['date'])->toBe($today->copy()->subDays(20)->format('Y-m-d'));
-//     expect($dailyClicks[1]['date'])->toBe($today->copy()->subDays(10)->format('Y-m-d'));
-//     expect($dailyClicks[2]['date'])->toBe($today->copy()->subDays(5)->format('Y-m-d'));
-// });
-
-// test('it excludes visits older than 30 days from daily clicks', function () {
-//     $link = createLinkForAnalytics();
-    
-//     createVisitForAnalytics($link->id, ['created_at' => now()->subDays(15)]);
-//     createVisitForAnalytics($link->id, ['created_at' => now()->subDays(40)]);
-//     createVisitForAnalytics($link->id, ['created_at' => now()->subDays(25)]);
-
-//     $analytics = $this->analyticsService->getLinkAnalytics($link);
-//     $dailyClicks = $analytics['daily_clicks'];
-
-//     expect($dailyClicks)->toHaveCount(2);
-// });
-
-// test('it returns daily clicks with correct counts', function () {
-//     $link = createLinkForAnalytics();
-    
-//     $date = now()->subDays(5)->format('Y-m-d');
-//     createVisitForAnalytics($link->id, ['created_at' => now()->subDays(5)]);
-//     createVisitForAnalytics($link->id, ['created_at' => now()->subDays(5)]);
-//     createVisitForAnalytics($link->id, ['created_at' => now()->subDays(3)]);
-
-//     $analytics = $this->analyticsService->getLinkAnalytics($link);
-//     $dailyClicks = $analytics['daily_clicks'];
-
-//     expect($dailyClicks->where('date', $date)->first()['total'])->toBe(2);
-// });
-
 test('it returns empty collection when no visits for daily clicks', function () {
     $link = createLinkForAnalytics();
     $analytics = $this->analyticsService->getLinkAnalytics($link);
 
     expect($analytics['daily_clicks'])->toBeEmpty();
 });
-
-// test('it orders daily clicks by date ascending', function () {
-//     $link = createLinkForAnalytics();
-    
-//     createVisitForAnalytics($link->id, ['created_at' => now()->subDays(10)]);
-//     createVisitForAnalytics($link->id, ['created_at' => now()->subDays(5)]);
-//     createVisitForAnalytics($link->id, ['created_at' => now()->subDays(1)]);
-
-//     $analytics = $this->analyticsService->getLinkAnalytics($link);
-//     $dailyClicks = $analytics['daily_clicks'];
-
-//     $dates = $dailyClicks->pluck('date')->toArray();
-//     expect($dates)->toBeSorted('asc');
-// });
-
-// ============================================
-// 6. EDGE CASE TESTS
-// ============================================
-
-// test('it handles multiple links with visits correctly', function () {
-//     $link1 = createLinkForAnalytics();
-//     $link2 = createLinkForAnalytics();
-    
-//     createVisitForAnalytics($link1->id);
-//     createVisitForAnalytics($link1->id);
-//     createVisitForAnalytics($link2->id);
-
-//     $analytics1 = $this->analyticsService->getLinkAnalytics($link1);
-//     $analytics2 = $this->analyticsService->getLinkAnalytics($link2);
-
-//     expect($analytics1['total_clicks'])->toBe(2);
-//     expect($analytics2['total_clicks'])->toBe(1);
-// });
 
 test('it handles visits with very long referer URLs', function () {
     $link = createLinkForAnalytics();
@@ -341,59 +226,6 @@ test('it handles visits with special characters in referer', function () {
 
     expect($topReferers[0]['referer'])->toBe($referer);
 });
-
-// test('it handles visits with missing data', function () {
-//     $link = createLinkForAnalytics();
-    
-//     createVisitForAnalytics($link->id, [
-//         'ip_address' => null,
-//         'user_agent' => null,
-//         'referer' => null,
-//     ]);
-
-//     $analytics = $this->analyticsService->getLinkAnalytics($link);
-
-//     expect($analytics['total_clicks'])->toBe(1);
-//     expect($analytics['top_referers'][0]['referer'])->toBe('Direct');
-// });
-
-// ============================================
-// 7. COMPREHENSIVE ANALYTICS TEST
-// ============================================
-
-// test('it returns complete analytics for link with mixed data', function () {
-//     $link = createLinkForAnalytics(['clicks' => 10]);
-    
-//     createVisitForAnalytics($link->id, [
-//         'ip_address' => '192.168.1.1',
-//         'referer' => 'https://google.com',
-//         'created_at' => now()->subHours(2),
-//     ]);
-//     createVisitForAnalytics($link->id, [
-//         'ip_address' => '192.168.1.2',
-//         'referer' => 'https://google.com',
-//         'created_at' => now()->subHours(5),
-//     ]);
-//     createVisitForAnalytics($link->id, [
-//         'ip_address' => '192.168.1.1',
-//         'referer' => 'https://facebook.com',
-//         'created_at' => now()->subDays(2),
-//     ]);
-//     createVisitForAnalytics($link->id, [
-//         'ip_address' => '192.168.1.3',
-//         'referer' => 'https://twitter.com',
-//         'created_at' => now()->subDays(10),
-//     ]);
-
-//     $analytics = $this->analyticsService->getLinkAnalytics($link);
-
-//     expect($analytics['total_clicks'])->toBe(10);
-//     expect($analytics['unique_visitors'])->toBe(3);
-//     expect($analytics['last_24_hours'])->toBe(2);
-//     expect($analytics['last_7_days'])->toBe(3);
-//     expect($analytics['top_referers'])->toHaveCount(3);
-//     expect($analytics['daily_clicks'])->toHaveCount(3);
-// });
 
 // ============================================
 // HELPER FUNCTIONS
