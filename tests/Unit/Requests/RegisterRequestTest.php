@@ -25,8 +25,8 @@ test('it validates email max length', function () {
     $data = [
         'name' => 'Test User',
         'email' => str_repeat('a', 245) . '@example.com', // 256+ characters
-        'password' => 'Password123!',
-        'password_confirmation' => 'Password123!',
+        'password' => 'Test@1234',
+        'password_confirmation' => 'Test@1234',
         'terms' => 'accepted',
     ];
     $validator = Validator::make($data, (new RegisterRequest())->rules());
@@ -38,9 +38,9 @@ test('it validates email max length', function () {
 test('it handles email with trailing spaces', function () {
     $data = [
         'name' => 'Test User',
-        'email' => ' test@example.com ',
-        'password' => 'ValidPassword123!',
-        'password_confirmation' => 'ValidPassword123!',
+        'email' => ' testuser@example.com ',
+        'password' => 'Test@1234',
+        'password_confirmation' => 'Test@1234',
         'terms' => 'accepted',
     ];
     $validator = Validator::make($data, (new RegisterRequest())->rules());
@@ -114,8 +114,8 @@ function createUserForRegisterTest(array $attributes = []): User
 {
     $defaults = [
         'name' => 'Test User',
-        'email' => 'test@example.com',
-        'password' => \Illuminate\Support\Facades\Hash::make('password123'),
+        'email' => 'testuser@example.com',
+        'password' => \Illuminate\Support\Facades\Hash::make('Test@1234'),
         'email_verified_at' => now(),
         'remember_token' => \Illuminate\Support\Str::random(10),
     ];
