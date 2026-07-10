@@ -46,7 +46,7 @@ test('it accepts valid http URL', function () {
 
 test('it accepts valid https URL', function () {
     $data = [
-        'original_url' => 'https://example.com',
+        'original_url' => 'https://zaplink.com',
     ];
     $validator = Validator::make($data, (new StoreLinkRequest())->rules());
 
@@ -55,7 +55,7 @@ test('it accepts valid https URL', function () {
 
 test('it accepts URL with path', function () {
     $data = [
-        'original_url' => 'https://example.com/path/to/page',
+        'original_url' => 'https://zaplink.com/path/to/page',
     ];
     $validator = Validator::make($data, (new StoreLinkRequest())->rules());
 
@@ -64,7 +64,7 @@ test('it accepts URL with path', function () {
 
 test('it accepts URL with query parameters', function () {
     $data = [
-        'original_url' => 'https://example.com?query=value&foo=bar',
+        'original_url' => 'https://zaplink.com?query=value&foo=bar',
     ];
     $validator = Validator::make($data, (new StoreLinkRequest())->rules());
 
@@ -73,7 +73,7 @@ test('it accepts URL with query parameters', function () {
 
 test('it accepts URL with anchor', function () {
     $data = [
-        'original_url' => 'https://example.com#section',
+        'original_url' => 'https://zaplink.com#section',
     ];
     $validator = Validator::make($data, (new StoreLinkRequest())->rules());
 
@@ -96,7 +96,7 @@ test('it rejects file protocol', function () {
 // ============================================
 
 test('it accepts URL at max length', function () {
-    $longUrl = 'https://example.com/' . str_repeat('a', 2000);
+    $longUrl = 'https://zaplink.com/' . str_repeat('a', 2000);
     $data = [
         'original_url' => $longUrl,
     ];
@@ -138,7 +138,7 @@ test('it allows shortening URL with path that is too long to be a short code', f
 
 test('it allows title to be null', function () {
     $data = [
-        'original_url' => 'https://example.com',
+        'original_url' => 'https://zaplink.com',
         'title' => null,
     ];
     $validator = Validator::make($data, (new StoreLinkRequest())->rules());
@@ -148,7 +148,7 @@ test('it allows title to be null', function () {
 
 test('it allows title to be empty string', function () {
     $data = [
-        'original_url' => 'https://example.com',
+        'original_url' => 'https://zaplink.com',
         'title' => '',
     ];
     $validator = Validator::make($data, (new StoreLinkRequest())->rules());
@@ -158,7 +158,7 @@ test('it allows title to be empty string', function () {
 
 test('it validates title is string', function () {
     $data = [
-        'original_url' => 'https://example.com',
+        'original_url' => 'https://zaplink.com',
         'title' => 123,
     ];
     $validator = Validator::make($data, (new StoreLinkRequest())->rules());
@@ -169,7 +169,7 @@ test('it validates title is string', function () {
 
 test('it validates title max length', function () {
     $data = [
-        'original_url' => 'https://example.com',
+        'original_url' => 'https://zaplink.com',
         'title' => str_repeat('a', 256),
     ];
     $validator = Validator::make($data, (new StoreLinkRequest())->rules());
@@ -180,7 +180,7 @@ test('it validates title max length', function () {
 
 test('it accepts title with special characters', function () {
     $data = [
-        'original_url' => 'https://example.com',
+        'original_url' => 'https://zaplink.com',
         'title' => 'My Awesome Link! @#$%',
     ];
     $validator = Validator::make($data, (new StoreLinkRequest())->rules());
@@ -194,7 +194,7 @@ test('it accepts title with special characters', function () {
 
 test('it allows custom_code to be null', function () {
     $data = [
-        'original_url' => 'https://example.com',
+        'original_url' => 'https://zaplink.com',
         'custom_code' => null,
     ];
     $validator = Validator::make($data, (new StoreLinkRequest())->rules());
@@ -204,7 +204,7 @@ test('it allows custom_code to be null', function () {
 
 test('it accepts valid custom_code', function () {
     $data = [
-        'original_url' => 'https://example.com',
+        'original_url' => 'https://zaplink.com',
         'custom_code' => 'valid123',
     ];
     $validator = Validator::make($data, (new StoreLinkRequest())->rules());
@@ -214,7 +214,7 @@ test('it accepts valid custom_code', function () {
 
 test('it accepts custom_code with uppercase letters', function () {
     $data = [
-        'original_url' => 'https://example.com',
+        'original_url' => 'https://zaplink.com',
         'custom_code' => 'VALID123',
     ];
     $validator = Validator::make($data, (new StoreLinkRequest())->rules());
@@ -228,7 +228,7 @@ test('it accepts custom_code with uppercase letters', function () {
 
 test('it allows expires_at to be null', function () {
     $data = [
-        'original_url' => 'https://example.com',
+        'original_url' => 'https://zaplink.com',
         'expires_at' => null,
     ];
     $validator = Validator::make($data, (new StoreLinkRequest())->rules());
@@ -238,7 +238,7 @@ test('it allows expires_at to be null', function () {
 
 test('it allows expires_at to be omitted', function () {
     $data = [
-        'original_url' => 'https://example.com',
+        'original_url' => 'https://zaplink.com',
     ];
     $validator = Validator::make($data, (new StoreLinkRequest())->rules());
 
@@ -247,7 +247,7 @@ test('it allows expires_at to be omitted', function () {
 
 test('it validates expires_at is a valid date', function () {
     $data = [
-        'original_url' => 'https://example.com',
+        'original_url' => 'https://zaplink.com',
         'expires_at' => 'not-a-date',
     ];
     $validator = Validator::make($data, (new StoreLinkRequest())->rules());
@@ -258,7 +258,7 @@ test('it validates expires_at is a valid date', function () {
 
 test('it validates expires_at is after now', function () {
     $data = [
-        'original_url' => 'https://example.com',
+        'original_url' => 'https://zaplink.com',
         'expires_at' => now()->addDay(),
     ];
     $validator = Validator::make($data, (new StoreLinkRequest())->rules());
@@ -268,7 +268,7 @@ test('it validates expires_at is after now', function () {
 
 test('it validates expires_at with date string', function () {
     $data = [
-        'original_url' => 'https://example.com',
+        'original_url' => 'https://zaplink.com',
         'expires_at' => now()->addWeek()->toDateString(),
     ];
     $validator = Validator::make($data, (new StoreLinkRequest())->rules());
@@ -278,7 +278,7 @@ test('it validates expires_at with date string', function () {
 
 test('it validates expires_at with datetime string', function () {
     $data = [
-        'original_url' => 'https://example.com',
+        'original_url' => 'https://zaplink.com',
         'expires_at' => now()->addWeek()->toDateTimeString(),
     ];
     $validator = Validator::make($data, (new StoreLinkRequest())->rules());
@@ -292,7 +292,7 @@ test('it validates expires_at with datetime string', function () {
 
 test('it passes validation with minimal valid data', function () {
     $data = [
-        'original_url' => 'https://example.com',
+        'original_url' => 'https://zaplink.com',
     ];
     $validator = Validator::make($data, (new StoreLinkRequest())->rules());
 
@@ -301,7 +301,7 @@ test('it passes validation with minimal valid data', function () {
 
 test('it passes validation with custom code only', function () {
     $data = [
-        'original_url' => 'https://example.com',
+        'original_url' => 'https://zaplink.com',
         'custom_code' => 'custom123',
     ];
     $validator = Validator::make($data, (new StoreLinkRequest())->rules());
@@ -311,7 +311,7 @@ test('it passes validation with custom code only', function () {
 
 test('it passes validation with title only', function () {
     $data = [
-        'original_url' => 'https://example.com',
+        'original_url' => 'https://zaplink.com',
         'title' => 'Test Title',
     ];
     $validator = Validator::make($data, (new StoreLinkRequest())->rules());
@@ -321,7 +321,7 @@ test('it passes validation with title only', function () {
 
 test('it passes validation with expiration only', function () {
     $data = [
-        'original_url' => 'https://example.com',
+        'original_url' => 'https://zaplink.com',
         'expires_at' => now()->addWeek(),
     ];
     $validator = Validator::make($data, (new StoreLinkRequest())->rules());
@@ -423,7 +423,7 @@ test('isZapLinkUrl returns false for non-ZapLink URL', function () {
     $reflection = new ReflectionMethod($request, 'isZapLinkUrl');
     $reflection->setAccessible(true);
 
-    $result = $reflection->invoke($request, 'https://example.com');
+    $result = $reflection->invoke($request, 'https://zaplink.com');
     expect($result)->toBeFalse();
 });
 
@@ -454,7 +454,7 @@ test('isSelfReferencing returns false for external URL', function () {
     $reflection = new ReflectionMethod($request, 'isSelfReferencing');
     $reflection->setAccessible(true);
 
-    $result = $reflection->invoke($request, 'https://example.com/abc123');
+    $result = $reflection->invoke($request, 'https://zaplink.com/abc123');
     expect($result)->toBeFalse();
 });
 
