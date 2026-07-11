@@ -100,20 +100,14 @@
                                             View
                                         </a>
                                         <span class="text-gray-300">|</span>
-                                        <form action="{{ route('links.destroy', $link->short_code) }}" 
-                                              method="POST" 
-                                              class="inline"
-                                              onsubmit="return confirm('Are you sure you want to delete this link? This action cannot be undone.');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" 
-                                                    class="text-red-500 hover:text-red-700 transition" 
-                                                    title="Delete">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                                </svg>
-                                            </button>
-                                        </form>
+                                        <button type="button" 
+                                                onclick="openDeleteModal('{{ $link->short_code }}')"
+                                                class="text-red-500 hover:text-red-700 transition" 
+                                                title="Delete">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                            </svg>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -155,14 +149,60 @@
     @endif
 </div>
 
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="fixed inset-0 z-50 hidden">
+    <!-- Modal Backdrop -->
+    <div class="absolute inset-0 bg-gray-900/50" onclick="closeDeleteModal()"></div>
+    
+    <!-- Modal Content -->
+    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md">
+        <div class="bg-white shadow-xl border border-gray-200">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between p-4 border-b border-gray-200">
+                <h3 class="text-lg font-bold text-gray-900">Delete Link</h3>
+                <button type="button" onclick="closeDeleteModal()" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="p-6 text-center">
+                
+                <p class="text-gray-700 mb-1">Are you sure you want to delete this link?</p>
+                <p class="text-sm text-gray-500">This action cannot be undone.</p>
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="flex justify-center gap-3 p-4 border-t border-gray-200">
+                <button type="button" onclick="closeDeleteModal()" 
+        class="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium text-sm transition">
+    Cancel
+</button>
+                <form id="deleteForm" method="POST" class="inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" 
+                            class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium transition">
+                        Delete Link
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+// ============================================
+// COPY TO CLIPBOARD FUNCTION
+// ============================================
 function copyToClipboard(url) {
     if (navigator.clipboard) {
         navigator.clipboard.writeText(url).then(() => {
             showCopyFeedback(event);
         });
     } else {
-        // Fallback for older browsers
         const input = document.createElement('input');
         input.value = url;
         document.body.appendChild(input);
@@ -187,5 +227,34 @@ function showCopyFeedback(event) {
         button.innerHTML = originalHtml;
     }, 2000);
 }
+
+// ============================================
+// DELETE MODAL FUNCTIONS
+// ============================================
+function openDeleteModal(shortCode) {
+    const modal = document.getElementById('deleteModal');
+    const deleteForm = document.getElementById('deleteForm');
+    
+    // Set the form action to the correct delete route
+    deleteForm.action = '/links/' + shortCode;
+    
+    // Show the modal
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeDeleteModal() {
+    const modal = document.getElementById('deleteModal');
+    modal.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+}
+
+// Close modal when pressing Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeDeleteModal();
+    }
+});
+
+// Close modal when clicking outside (already handled by the backdrop)
 </script>
-@endsection
