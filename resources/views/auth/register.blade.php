@@ -14,12 +14,6 @@
             <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
                 Create your account
             </h2>
-            <p class="mt-2 text-center text-sm text-gray-600">
-                Already have an account?
-                <a href="{{ route('login') }}" class="font-medium text-blue-600 hover:text-blue-800">
-                    Sign in
-                </a>
-            </p>
         </div>
 
         <!-- Registration Form -->
@@ -139,6 +133,13 @@
                     </button>
                 </div>
             </form>
+            
+            <p class="mt-2 text-center text-sm text-gray-600">
+                Already have an account?
+                <a href="{{ route('login') }}" class="font-medium text-blue-600 hover:text-blue-800">
+                    Sign in
+                </a>
+            </p>
         </div>
     </div>
 </div>

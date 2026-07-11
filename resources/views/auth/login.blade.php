@@ -14,16 +14,10 @@
             <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
                 Sign in to your account
             </h2>
-            <p class="mt-2 text-center text-sm text-gray-600">
-                Don't have an account?
-                <a href="{{ route('register') }}" class="font-medium text-blue-600 hover:text-blue-800">
-                    Create one now
-                </a>
-            </p>
         </div>
 
         <!-- Login Form -->
-        <div class="bg-white py-8 px-4 rounded-lg border border-gray-200 sm:px-10">
+        <div class="bg-white py-4 px-4 rounded-lg border border-gray-200 sm:px-10">
             <form class="space-y-6" action="{{ route('login') }}" method="POST">
                 @csrf
 
@@ -93,6 +87,13 @@
                     </button>
                 </div>
             </form>
+            
+            <p class="mt-2 text-center text-sm text-gray-600">
+                Don't have an account?
+                <a href="{{ route('register') }}" class="font-medium text-blue-600 hover:text-blue-800">
+                    Create one now
+                </a>
+            </p>
         </div>
     </div>
 </div>
