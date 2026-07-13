@@ -92,11 +92,11 @@
                         <label for="expires_at" class="block text-sm font-medium text-gray-700 mb-2">
                             Expiration Date <span class="text-gray-500 text-xs">(Optional)</span>
                         </label>
-                        <input type="datetime-local" 
+                        <input type="date" 
                                id="expires_at" 
                                name="expires_at" 
                                value="{{ old('expires_at') }}"
-                               min="{{ now()->addDay()->format('Y-m-d\TH:i') }}"
+                               min="{{ now()->addDay()->format('Y-m-d') }}"
                                class="w-full px-4 py-3 bg-gray-50 border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('expires_at') border-red-500 @enderror">
                         @error('expires_at')
                             <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
