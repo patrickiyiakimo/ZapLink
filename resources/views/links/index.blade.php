@@ -177,7 +177,7 @@
             <!-- Modal Footer -->
             <div class="flex justify-center gap-3 p-4 border-t border-gray-200">
                 <button type="button" onclick="closeDeleteModal()" 
-        class="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium text-sm transition">
+        class="px-3 py-1 hover:bg-gray-200 text-gray-700 font-medium text-sm transition">
     Cancel
 </button>
                 <form id="deleteForm" method="POST" class="inline">
