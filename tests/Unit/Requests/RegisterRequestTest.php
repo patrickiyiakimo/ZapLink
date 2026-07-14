@@ -1,5 +1,4 @@
 <?php
-// tests/Unit/Requests/RegisterRequestTest.php
 
 use App\Http\Requests\RegisterRequest;
 use Illuminate\Support\Facades\Validator;
@@ -24,7 +23,7 @@ test('it validates required fields', function () {
 test('it validates email max length', function () {
     $data = [
         'name' => 'Test User',
-        'email' => str_repeat('a', 245) . '@example.com', // 256+ characters
+        'email' => str_repeat('a', 245) . '@testuser.com', // 256+ characters
         'password' => 'Test@1234',
         'password_confirmation' => 'Test@1234',
         'terms' => 'accepted',
@@ -38,7 +37,7 @@ test('it validates email max length', function () {
 test('it handles email with trailing spaces', function () {
     $data = [
         'name' => 'Test User',
-        'email' => ' testuser@example.com ',
+        'email' => ' testuser@testuser.com ',
         'password' => 'Test@1234',
         'password_confirmation' => 'Test@1234',
         'terms' => 'accepted',
@@ -114,7 +113,7 @@ function createUserForRegisterTest(array $attributes = []): User
 {
     $defaults = [
         'name' => 'Test User',
-        'email' => 'testuser@example.com',
+        'email' => 'testuser@testuser.com',
         'password' => \Illuminate\Support\Facades\Hash::make('Test@1234'),
         'email_verified_at' => now(),
         'remember_token' => \Illuminate\Support\Str::random(10),

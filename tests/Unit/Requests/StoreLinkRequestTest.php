@@ -132,10 +132,6 @@ test('it allows shortening URL with path that is too long to be a short code', f
 // 6. SELF-REFERENCING VALIDATION TESTS
 // ============================================
 
-// ============================================
-// 7. TITLE VALIDATION TESTS
-// ============================================
-
 test('it allows title to be null', function () {
     $data = [
         'original_url' => 'https://zaplink.com',
@@ -189,7 +185,7 @@ test('it accepts title with special characters', function () {
 });
 
 // ============================================
-// 8. CUSTOM CODE VALIDATION TESTS
+// 7. CUSTOM CODE VALIDATION TESTS
 // ============================================
 
 test('it allows custom_code to be null', function () {
@@ -223,7 +219,7 @@ test('it accepts custom_code with uppercase letters', function () {
 });
 
 // ============================================
-// 9. EXPIRATION DATE VALIDATION TESTS
+// 8. EXPIRATION DATE VALIDATION TESTS
 // ============================================
 
 test('it allows expires_at to be null', function () {
@@ -287,7 +283,7 @@ test('it validates expires_at with datetime string', function () {
 });
 
 // ============================================
-// 10. VALID DATA TESTS
+// 9. VALID DATA TESTS
 // ============================================
 
 test('it passes validation with minimal valid data', function () {
@@ -330,7 +326,7 @@ test('it passes validation with expiration only', function () {
 });
 
 // ============================================
-// 11. CUSTOM MESSAGE TESTS
+// 10. CUSTOM MESSAGE TESTS
 // ============================================
 
 test('it returns custom error messages', function () {
@@ -365,7 +361,7 @@ test('it uses custom url format message', function () {
 });
 
 // ============================================
-// 12. RULE STRUCTURE TESTS
+// 11. RULE STRUCTURE TESTS
 // ============================================
 
 test('it returns rules array', function () {
@@ -415,7 +411,7 @@ test('it validates expires_at rule structure', function () {
 });
 
 // ============================================
-// 13. IS ZAPLINK URL METHOD TESTS
+// 12. IS ZAPLINK URL METHOD TESTS
 // ============================================
 
 test('isZapLinkUrl returns false for non-ZapLink URL', function () {
@@ -437,7 +433,7 @@ test('isZapLinkUrl returns false for different domain', function () {
 });
 
 // ============================================
-// 14. IS SELF REFERENCING METHOD TESTS
+// 13. IS SELF REFERENCING METHOD TESTS
 // ============================================
 
 test('isSelfReferencing returns false for non-existing short code', function () {
