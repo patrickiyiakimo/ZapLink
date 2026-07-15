@@ -41,10 +41,11 @@
                 @endguest
             </div>
             
+            {{-- ✅ FIX: Added self-start to prevent button stretching --}}
             <button type="submit" 
                     id="shortenBtn"
                     @guest disabled @endguest
-                    class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold transition duration-200 whitespace-nowrap @guest opacity-50 cursor-not-allowed @endguest">
+                    class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold transition duration-200 whitespace-nowrap @guest opacity-50 cursor-not-allowed @endguest self-start flex-shrink-0">
                 Shorten URL
             </button>
         </div>
