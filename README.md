@@ -67,52 +67,51 @@ bash
 cp .env.example .env
 php artisan key:generate
 Update your .env file with your database credentials:
+## 📁 Project Structure
 
-📁 Project Structure
 Here's a breakdown of the key parts of the codebase:
 
-Core Directories
-text
+### Core Directories
+
+```
 app/
 ├── Http/
 │   ├── Controllers/
-│   │   ├── Auth/        # Authentication controllers
-│   │   ├── Web/         # Web interface controllers
-│   │   └── Api/         # RESTful API controllers
-│   ├── Middleware/      # Custom middleware (Rate limiting, URL validation)
-│   └── Requests/        # Form requests with validation rules
-├── Models/              # Eloquent models (Link, Visit, User)
-├── Services/            # Business logic layer
-│   ├── LinkService.php      # Core link operations
-│   ├── AnalyticsService.php # Analytics & statistics
+│   │   ├── Auth/              # Authentication controllers
+│   │   ├── Web/               # Web interface controllers
+│   │   └── Api/               # RESTful API controllers
+│   ├── Middleware/            # Custom middleware (Rate limiting, URL validation)
+│   └── Requests/              # Form requests with validation rules
+├── Models/                    # Eloquent models (Link, Visit, User)
+├── Services/                  # Business logic layer
+│   ├── LinkService.php        # Core link operations
+│   ├── AnalyticsService.php   # Analytics & statistics
 │   └── UrlValidatorService.php # URL validation & security
-└── Repositories/        # Data access layer (optional, but I like the separation)
-Key Design Decisions
-Service Layer Pattern
-I put all the business logic in service classes rather than bloating the controllers. This keeps the controllers thin and makes testing easier. The LinkService handles all the link operations - creation, resolution, and validation.
+└── Repositories/              # Data access layer
+```
 
-Custom Validation
-The UrlValidatorService checks URLs for safety before shortening. It prevents:
+### Key Design Decisions
 
-Malicious or spam domains
+#### Service Layer Pattern
+I put all the business logic in service classes rather than bloating the controllers. This keeps the controllers thin and makes testing easier. The `LinkService` handles all the link operations - creation, resolution, and validation.
 
-Self-referencing loops
+#### Custom Validation
+The `UrlValidatorService` checks URLs for safety before shortening. It prevents:
+- Malicious or spam domains
+- Self-referencing loops
+- Already shortened URLs
 
-Already shortened URLs
-
-Repository Pattern
+#### Repository Pattern
 I used repositories for database interactions. This might be overkill for a small project, but it makes the code more testable and keeps the data access logic separate from business logic.
 
-Why These Patterns?
+### Why These Patterns?
+
 After 3 years of writing PHP, I've learned that the biggest challenge isn't writing code that works - it's writing code that can be maintained 6 months later. These patterns:
 
-Keep things organized - You always know where to find what
-
-Make testing easier - You can mock repositories and services
-
-Prevent code duplication - Common logic lives in one place
-
-Scale better - Adding new features doesn't break existing ones
+- **Keep things organized** - You always know where to find what
+- **Make testing easier** - You can mock repositories and services
+- **Prevent code duplication** - Common logic lives in one place
+- **Scale better** - Adding new features doesn't break existing ones
 
 🚧 What I'd Add Next
 If I had more time, I'd build:
